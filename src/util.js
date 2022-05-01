@@ -1,3 +1,5 @@
+import dayjs from 'dayjs';
+
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
   const upper = Math.floor(Math.max(a, b));
@@ -11,4 +13,17 @@ const generateRandomItem = (array) => {
   return array[randomIndex];
 };
 
-export {getRandomInteger, generateRandomItem};
+const generateDate = () => {
+  const isDate = Boolean(getRandomInteger(0, 1));
+
+  if (!isDate) {
+    return null;
+  }
+
+  const maxDaysGap = 7;
+  const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
+
+  return dayjs().add(daysGap, 'day').toDate();
+};
+
+export {getRandomInteger, generateRandomItem, generateDate};

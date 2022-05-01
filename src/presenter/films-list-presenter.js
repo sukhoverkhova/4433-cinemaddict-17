@@ -14,6 +14,7 @@ export default class FilmListPresenter {
   filmsListComponent = new FilmsListView();
 
   init = (mainContainer, filmsModel) => {
+    console.log(filmsModel);
     this.mainContainer = mainContainer;
 
     render(new SortView(), this.mainContainer);

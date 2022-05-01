@@ -1,4 +1,4 @@
-import {getRandomInteger, generateRandomItem} from '../util.js';
+import {getRandomInteger, generateRandomItem, generateDate} from '../util.js';
 import {COMMENTS_MAX_COUNT, FILMS} from '../const.js';
 import {generateComment} from './comment.js';
 
@@ -18,10 +18,10 @@ export const generateFilm = () => ({
   comments: generateCommentList(),
   filmInfo: generateRandomItem(FILMS),
   userDetails: {
-    watchlist: false,
-    alreadyWatched: true,
-    watchingDate: '2019-04-12T16:12:32.554Z',
-    favorite: false
+    watchlist: Boolean(getRandomInteger(0, 1)),
+    alreadyWatched: Boolean(getRandomInteger(0, 1)),
+    watchingDate: generateDate(),
+    favorite: Boolean(getRandomInteger(0, 1))
   }
 });
 

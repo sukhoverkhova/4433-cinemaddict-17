@@ -10,8 +10,6 @@ const siteMainElement = document.querySelector('.main');
 const filmsModel = new FilmsModel();
 const filmListPresenter = new FilmListPresenter();
 
-console.log(filmsModel);
-
 render(new UserProfileView(), siteHeaderElement);
 render(new MainNavigationView(), siteMainElement);
 
