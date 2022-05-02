@@ -31,6 +31,6 @@ export default class FilmListPresenter {
     }
 
     render(new ShowMoreButtonView(), this.mainContainer);
-    // render(new FilmDetailsView(), this.mainContainer);
+    render(new FilmDetailsView(this.films[1]), this.mainContainer);
   };
 }

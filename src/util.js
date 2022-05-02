@@ -28,4 +28,6 @@ const generateDate = () => {
 
 const getYearOfDate = (date) => dayjs(date).format('YYYY');
 
-export {getRandomInteger, generateRandomItem, generateDate, getYearOfDate};
+const humanizeDate = (date) => dayjs(date).format('D MMMM YYYY');
+
+export {getRandomInteger, generateRandomItem, generateDate, getYearOfDate, humanizeDate};
