@@ -16,14 +16,12 @@ const COMMENTS = [
 
 const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 
-const COMMENTS_MAX_COUNT = 8;
-
 const FILMS = [
   {
     title: 'A Little Pony Without The Carpet',
     alternativeTitle: 'Laziness Who Sold Themselves',
-    totalRating: 5,
-    poster: 'images/posters/blue-blazes.jpg',
+    totalRating: 8.8,
+    poster: 'images/posters/made-for-each-other.png',
     ageRating: 0,
     director: 'Tom Ford',
     writers: [
@@ -45,7 +43,7 @@ const FILMS = [
   {
     title: 'Moana',
     alternativeTitle: 'The ocean is calling',
-    totalRating: 5,
+    totalRating: 6.7,
     poster: 'images/posters/popeye-meets-sinbad.png',
     ageRating: 8,
     director: 'Ron Clements',
@@ -60,25 +58,20 @@ const FILMS = [
       'Jemaine Clement'
     ],
     release: {
-      date: '2019-05-11T00:00:00.000Z',
+      date: '2016-05-11T00:00:00.000Z',
       releaseCountry: 'USA'
     },
     runtime: 'Ron Clements',
     genre: [
-      'Animation',
-      'Adventure',
-      'Comedy',
-      'Family',
-      'Fantasy',
-      'Musical'
+      'Animation'
     ],
     description: 'In Ancient Polynesia, when a terrible curse incurred by the Demigod Maui reaches Moanas island, she answers the Oceans call to seek out the Demigod to set things right.',
   },
   {
     title: 'Tangled',
     alternativeTitle: 'Theyre taking adventure to new lengths.',
-    totalRating: 5,
-    poster: 'santa-claus-conquers-the-martians.jpg',
+    totalRating: 9.1,
+    poster: 'images/posters/the-man-with-the-golden-arm.jpg',
     ageRating: 8,
     director: 'Ron Clements',
     writers: [
@@ -97,15 +90,13 @@ const FILMS = [
     },
     runtime: 'Ron Clements',
     genre: [
-      'Animation',
-      'Adventure',
-      'Comedy',
-      'Family',
-      'Fantasy',
-      'Musical'
+      'Animation'
     ],
     description: 'After receiving the healing powers from a magical flower, the baby Princess Rapunzel is kidnapped from the palace in the middle of the night by Mother Gothel.',
   }
 ];
 
-export {AUTHORS, COMMENTS, EMOTIONS, COMMENTS_MAX_COUNT, FILMS};
+const COMMENTS_MAX_COUNT = 8;
+const COMMENTS_MAX_LENGTH = 140;
+
+export {AUTHORS, COMMENTS, EMOTIONS, COMMENTS_MAX_COUNT, FILMS, COMMENTS_MAX_LENGTH};

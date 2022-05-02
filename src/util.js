@@ -26,4 +26,6 @@ const generateDate = () => {
   return dayjs().add(daysGap, 'day').toDate();
 };
 
-export {getRandomInteger, generateRandomItem, generateDate};
+const getYearOfDate = (date) => dayjs(date).format('YYYY');
+
+export {getRandomInteger, generateRandomItem, generateDate, getYearOfDate};
