@@ -3,6 +3,7 @@ import FilmsListSectionView from '../view/films-list-section-view.js';
 import FilmsListHeaderView from '../view/films-list-header-view.js';
 import FilmsListView from '../view/films-list-view.js';
 import FilmView from '../view/film-view.js';
+import FilmDetailsView from '../view/film-details-view.js';
 import SortView from '../view/sort-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import {render} from '../render.js';
@@ -12,8 +13,10 @@ export default class FilmListPresenter {
   filmsListSectionComponent = new FilmsListSectionView();
   filmsListComponent = new FilmsListView();
 
-  init = (mainContainer) => {
+  init = (mainContainer, filmsModel) => {
     this.mainContainer = mainContainer;
+    this.filmsModel = filmsModel;
+    this.films = [...this.filmsModel.getFilms()];
 
     render(new SortView(), this.mainContainer);
     render(this.filmsListContainerComponent, this.mainContainer);
@@ -22,10 +25,12 @@ export default class FilmListPresenter {
     render(new FilmsListHeaderView(), this.filmsListSectionComponent.getElement());
     render(this.filmsListComponent, this.filmsListSectionComponent.getElement());
 
-    for (let i = 0; i < 5; i++) {
-      render(new FilmView(), this.filmsListComponent.getElement());
+    for (let i = 0; i < this.films.length; i++) {
+      const filmView = new FilmView(this.films[i]);
+      render(filmView, this.filmsListComponent.getElement());
     }
 
     render(new ShowMoreButtonView(), this.mainContainer);
+    render(new FilmDetailsView(this.films[1]), this.mainContainer);
   };
 }
