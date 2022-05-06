@@ -32,6 +32,7 @@ export default class FilmListPresenter {
     if (this.#films.length === 0) {
       render(new NoFilmsView(), this.#mainContainer);
     } else {
+      render(new SortView(), this.#mainContainer);
       render(this.#filmsListContainerComponent, this.#mainContainer);
       render(this.#filmsListSectionComponent, this.#filmsListContainerComponent.element);
 
