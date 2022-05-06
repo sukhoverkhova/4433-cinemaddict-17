@@ -7,6 +7,7 @@ import FilmDetailsView from '../view/film-details-view.js';
 import SortView from '../view/sort-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
 import {render} from '../render.js';
+import {isEscapeKey} from '../util.js';
 
 export default class FilmListPresenter {
   #mainContainer = null;
@@ -35,7 +36,6 @@ export default class FilmListPresenter {
     }
 
     render(new ShowMoreButtonView(), this.#mainContainer);
-    // render(new FilmDetailsView(this.#films[0]), this.#mainContainer);
   };
 
   #renderFilm = (film) => {
@@ -46,20 +46,33 @@ export default class FilmListPresenter {
       filmDetailsComponent.element.remove();
     };
 
-    const showFilmDetails = () => {
-      filmDetailsComponent = new FilmDetailsView(film);
+    const onEscKeyDown = (evt) => {
+      if (isEscapeKey) {
+        evt.preventDefault();
+        hideFilmDetails();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
 
+    const showFilmDetails = () => {
       const oldFilmDetailsElement = document.querySelector('.film-details');
       if (oldFilmDetailsElement) {
         oldFilmDetailsElement.remove();
       }
 
+      filmDetailsComponent = new FilmDetailsView(film);
       render(filmDetailsComponent, this.#mainContainer);
 
-      filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', hideFilmDetails);
+      filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+        hideFilmDetails();
+        document.removeEventListener('keydown', onEscKeyDown);
+      });
     };
 
-    filmComponent.element.addEventListener('click', showFilmDetails);
+    filmComponent.element.addEventListener('click', () => {
+      showFilmDetails();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
 
     render(filmComponent, this.#filmsListComponent.element);
   };
