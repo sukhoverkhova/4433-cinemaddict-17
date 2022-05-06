@@ -6,8 +6,10 @@ import FilmView from '../view/film-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
 import SortView from '../view/sort-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
+
 import {render} from '../render.js';
 import {isEscapeKey} from '../util.js';
+import {OVERFLOW_HIDDEN_CLASS} from '../const.js';
 
 export default class FilmListPresenter {
   #mainContainer = null;
@@ -44,6 +46,7 @@ export default class FilmListPresenter {
 
     const hideFilmDetails = () => {
       filmDetailsComponent.element.remove();
+      document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
     };
 
     const onEscKeyDown = (evt) => {
@@ -67,6 +70,8 @@ export default class FilmListPresenter {
         hideFilmDetails();
         document.removeEventListener('keydown', onEscKeyDown);
       });
+
+      document.body.classList.add(OVERFLOW_HIDDEN_CLASS);
     };
 
     filmComponent.element.addEventListener('click', () => {
