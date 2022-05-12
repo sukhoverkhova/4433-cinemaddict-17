@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import {ESCAPE_KEY} from './const.js';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));
@@ -30,4 +31,6 @@ const getYearOfDate = (date) => dayjs(date).format('YYYY');
 
 const humanizeDate = (date) => dayjs(date).format('D MMMM YYYY');
 
-export {getRandomInteger, generateRandomItem, generateDate, getYearOfDate, humanizeDate};
+const isEscapeKey = (evt) => evt.key === ESCAPE_KEY;
+
+export {getRandomInteger, generateRandomItem, generateDate, getYearOfDate, humanizeDate, isEscapeKey};

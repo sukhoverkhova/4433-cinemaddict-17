@@ -6,31 +6,79 @@ import FilmView from '../view/film-view.js';
 import FilmDetailsView from '../view/film-details-view.js';
 import SortView from '../view/sort-view.js';
 import ShowMoreButtonView from '../view/show-more-button-view.js';
+
 import {render} from '../render.js';
+import {isEscapeKey} from '../util.js';
+import {OVERFLOW_HIDDEN_CLASS} from '../const.js';
 
 export default class FilmListPresenter {
-  filmsListContainerComponent = new FilmsListContainerView();
-  filmsListSectionComponent = new FilmsListSectionView();
-  filmsListComponent = new FilmsListView();
+  #mainContainer = null;
+  #filmsModel = null;
+
+  #filmsListContainerComponent = new FilmsListContainerView();
+  #filmsListSectionComponent = new FilmsListSectionView();
+  #filmsListComponent = new FilmsListView();
+
+  #films = [];
 
   init = (mainContainer, filmsModel) => {
-    this.mainContainer = mainContainer;
-    this.filmsModel = filmsModel;
-    this.films = [...this.filmsModel.getFilms()];
+    this.#mainContainer = mainContainer;
+    this.#filmsModel = filmsModel;
+    this.#films = [...this.#filmsModel.films];
 
-    render(new SortView(), this.mainContainer);
-    render(this.filmsListContainerComponent, this.mainContainer);
-    render(this.filmsListSectionComponent, this.filmsListContainerComponent.getElement());
+    render(new SortView(), this.#mainContainer);
+    render(this.#filmsListContainerComponent, this.#mainContainer);
+    render(this.#filmsListSectionComponent, this.#filmsListContainerComponent.element);
 
-    render(new FilmsListHeaderView(), this.filmsListSectionComponent.getElement());
-    render(this.filmsListComponent, this.filmsListSectionComponent.getElement());
+    render(new FilmsListHeaderView(), this.#filmsListSectionComponent.element);
+    render(this.#filmsListComponent, this.#filmsListSectionComponent.element);
 
-    for (let i = 0; i < this.films.length; i++) {
-      const filmView = new FilmView(this.films[i]);
-      render(filmView, this.filmsListComponent.getElement());
+    for (let i = 0; i < this.#films.length; i++) {
+      this.#renderFilm(this.#films[i]);
     }
 
-    render(new ShowMoreButtonView(), this.mainContainer);
-    render(new FilmDetailsView(this.films[1]), this.mainContainer);
+    render(new ShowMoreButtonView(), this.#mainContainer);
+  };
+
+  #renderFilm = (film) => {
+    const filmComponent = new FilmView(film);
+    let filmDetailsComponent;
+
+    const hideFilmDetails = () => {
+      filmDetailsComponent.element.remove();
+      document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
+    };
+
+    const onEscKeyDown = (evt) => {
+      if (isEscapeKey) {
+        evt.preventDefault();
+        hideFilmDetails();
+        document.removeEventListener('keydown', onEscKeyDown);
+      }
+    };
+
+    const showFilmDetails = () => {
+      const oldFilmDetailsElement = document.querySelector('.film-details');
+      if (oldFilmDetailsElement) {
+        oldFilmDetailsElement.remove();
+      }
+
+      filmDetailsComponent = new FilmDetailsView(film);
+      render(filmDetailsComponent, this.#mainContainer);
+
+      filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+        hideFilmDetails();
+        document.removeEventListener('keydown', onEscKeyDown);
+      });
+
+      document.body.classList.add(OVERFLOW_HIDDEN_CLASS);
+    };
+
+    filmComponent.element.addEventListener('click', () => {
+      showFilmDetails();
+      document.addEventListener('keydown', onEscKeyDown);
+    });
+
+    render(filmComponent, this.#filmsListComponent.element);
   };
 }
