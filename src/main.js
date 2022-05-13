@@ -8,9 +8,9 @@ const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');
 
 const filmsModel = new FilmsModel();
-const filmListPresenter = new FilmListPresenter();
+const filmListPresenter = new FilmListPresenter(siteMainElement, filmsModel);
 
 render(new UserProfileView(), siteHeaderElement);
 render(new MainNavigationView(), siteMainElement);
 
-filmListPresenter.init(siteMainElement, filmsModel);
+filmListPresenter.init();
