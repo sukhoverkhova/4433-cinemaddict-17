@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import {createElement} from '../render';
 
 const createNoFilmsTemplate = () => '<h2 class="films-list__title">There are no movies in our database</h2> ';
 

@@ -1,6 +1,6 @@
-import {createElement} from '../render.js';
-import {getYearOfDate} from '../util.js';
-import {COMMENTS_MAX_LENGTH} from '../const.js';
+import {createElement} from '../render';
+import {getYearOfDate} from '../util';
+import {COMMENTS_MAX_LENGTH} from '../const';
 
 const createFilmTemplate = (film) => {
   const filmInfo = film.filmInfo;

@@ -1,5 +1,5 @@
-import {createElement} from '../render.js';
-import {humanizeDate} from '../util.js';
+import {createElement} from '../render';
+import {humanizeDate} from '../util';
 
 const createFilmDetailsTemplate = (film) => {
   const filmInfo = film.filmInfo;

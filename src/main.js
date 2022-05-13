@@ -1,8 +1,8 @@
-import MainNavigationView from './view/main-navigation-view.js';
-import UserProfileView from './view/user-profile-view.js';
-import FilmListPresenter from './presenter/films-list-presenter.js';
-import {render} from './render.js';
-import FilmsModel from './model/films-model.js';
+import MainNavigationView from './view/main-navigation-view';
+import UserProfileView from './view/user-profile-view';
+import FilmListPresenter from './presenter/films-list-presenter';
+import {render} from './render';
+import FilmsModel from './model/films-model';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');

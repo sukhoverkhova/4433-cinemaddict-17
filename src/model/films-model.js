@@ -1,4 +1,4 @@
-import {generateFilm} from '../mock/film.js';
+import {generateFilm} from '../mock/film';
 
 export default class FilmsModel {
   #films = Array.from({length: 23}, generateFilm);

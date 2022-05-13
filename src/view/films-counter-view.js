@@ -1,4 +1,4 @@
-import {createElement} from '../render.js';
+import {createElement} from '../render';
 
 const createFilmsCounterTemplate = () => '<p>130 291 movies inside</p>';
 
