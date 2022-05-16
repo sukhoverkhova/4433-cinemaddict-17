@@ -1,4 +1,4 @@
-import {createElement} from '../render';
+import AbstractView from '../framework/view/abstract-stateful-view';
 import {getYearOfDate} from '../util';
 import {COMMENTS_MAX_LENGTH} from '../const';
 
@@ -41,27 +41,15 @@ const createFilmTemplate = (film) => {
   );
 };
 
-export default class FilmView {
-  #element = null;
+export default class FilmView extends AbstractView {
   #film = null;
 
   constructor(film) {
+    super();
     this.#film = film;
   }
 
   get template() {
     return createFilmTemplate(this.#film);
-  }
-
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
-
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
   }
 }
