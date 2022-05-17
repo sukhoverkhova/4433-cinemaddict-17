@@ -1,4 +1,4 @@
-const AUTHORS = [
+export const AUTHORS = [
   'Ilya OReilly',
   'Anna Engelmann',
   'George Lucas',
@@ -6,7 +6,7 @@ const AUTHORS = [
   'Olga Sukhova'
 ];
 
-const COMMENTS = [
+export const COMMENTS = [
   'In conclusion, this was a wonderful film and I recommend it heartily for both kids and adults. For Disney fans too, I think you will be delighted, if you want humour, adventure, beautiful animation, good music, classic storytelling, witty scripting and likable characters, Tangled is a perfect match.',
   'All in all, a magical, hilarious, witty, and very well thought through movie that deserves the Oscar that is surely coming to it - simply the best animated movie of the year as, more even than Toy Story 3, it rises beyond animation to make a wonderful heart-filled adventure that makes for very satisfying viewing indeed.',
   'A wonderful movie! I had forgotten all about Tangled, and am so glad I got to see it on the big screen. A great story with fun characters and beautiful animation that still looks new.',
@@ -14,9 +14,9 @@ const COMMENTS = [
   'Finally, my niece was happy because she was lifted by this beautiful pink princess (almost a sister for her) while my nephew got bored because the movie was lacking action and fights! In a decade, i am sure he will change his opinion!'
 ];
 
-const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
+export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 
-const FILMS = [
+export const FILMS = [
   {
     title: 'A Little Pony Without The Carpet',
     alternativeTitle: 'Laziness Who Sold Themselves',
@@ -96,12 +96,10 @@ const FILMS = [
   }
 ];
 
-const COMMENTS_MAX_COUNT = 8;
-const COMMENTS_MAX_LENGTH = 140;
+export const COMMENTS_MAX_COUNT = 8;
+export const COMMENTS_MAX_LENGTH = 140;
 
-const FILMS_COUNT_PER_STEP = 5;
+export const FILMS_COUNT_PER_STEP = 5;
 
-const ESCAPE_KEY = 'Escape';
-const OVERFLOW_HIDDEN_CLASS = 'hide-overflow';
-
-export {AUTHORS, COMMENTS, EMOTIONS, COMMENTS_MAX_COUNT, FILMS, COMMENTS_MAX_LENGTH, ESCAPE_KEY, OVERFLOW_HIDDEN_CLASS, FILMS_COUNT_PER_STEP};
+export const ESCAPE_KEY = 'Escape';
+export const OVERFLOW_HIDDEN_CLASS = 'hide-overflow';

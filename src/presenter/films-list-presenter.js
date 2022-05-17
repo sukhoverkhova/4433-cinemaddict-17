@@ -1,16 +1,16 @@
-import FilmsListContainerView from '../view/films-list-container-view.js';
-import FilmsListSectionView from '../view/films-list-section-view.js';
-import FilmsListHeaderView from '../view/films-list-header-view.js';
-import FilmsListView from '../view/films-list-view.js';
-import FilmView from '../view/film-view.js';
-import FilmDetailsView from '../view/film-details-view.js';
-import NoFilmsView from '../view/no-films-view.js';
-import SortView from '../view/sort-view.js';
-import ShowMoreButtonView from '../view/show-more-button-view.js';
+import FilmsListContainerView from '../view/films-list-container-view';
+import FilmsListSectionView from '../view/films-list-section-view';
+import FilmsListHeaderView from '../view/films-list-header-view';
+import FilmsListView from '../view/films-list-view';
+import FilmView from '../view/film-view';
+import FilmDetailsView from '../view/film-details-view';
+import NoFilmsView from '../view/no-films-view';
+import SortView from '../view/sort-view';
+import ShowMoreButtonView from '../view/show-more-button-view';
 
-import {render} from '../render.js';
-import {isEscapeKey} from '../util.js';
-import {OVERFLOW_HIDDEN_CLASS, FILMS_COUNT_PER_STEP} from '../const.js';
+import {render} from '../render';
+import {isEscapeKey} from '../util';
+import {OVERFLOW_HIDDEN_CLASS, FILMS_COUNT_PER_STEP} from '../const';
 
 export default class FilmListPresenter {
   #mainContainer = null;
@@ -35,9 +35,7 @@ export default class FilmListPresenter {
     this.#renderFilmList();
   };
 
-  #handleShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
-
+  #handleShowMoreButtonClick = () => {
     this.#films
       .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILMS_COUNT_PER_STEP)
       .forEach((film) => this.#renderFilm(film));
@@ -85,7 +83,7 @@ export default class FilmListPresenter {
       document.body.classList.add(OVERFLOW_HIDDEN_CLASS);
     };
 
-    filmComponent.element.addEventListener('click', () => {
+    filmComponent.setOpenPopupClickHandler(() => {
       showFilmDetails();
       document.addEventListener('keydown', onEscKeyDown);
     });
@@ -111,7 +109,7 @@ export default class FilmListPresenter {
       if (this.#films.length > FILMS_COUNT_PER_STEP) {
         render(this.#showMoreButtonCompoment, this.#mainContainer);
 
-        this.#showMoreButtonCompoment.element.addEventListener('click', this.#handleShowMoreButtonClick);
+        this.#showMoreButtonCompoment.setClickHandler(this.#handleShowMoreButtonClick);
       }
     }
   };

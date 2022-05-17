@@ -1,5 +1,5 @@
-import {createElement} from '../render.js';
-import {humanizeDate} from '../util.js';
+import AbstractView from '../framework/view/abstract-stateful-view';
+import {humanizeDate} from '../util';
 
 const createFilmDetailsTemplate = (film) => {
   const filmInfo = film.filmInfo;
@@ -150,11 +150,11 @@ const createFilmDetailsTemplate = (film) => {
   );
 };
 
-export default class FilmDetailsView {
-  #element = null;
+export default class FilmDetailsView extends AbstractView {
   #film = null;
 
   constructor(film) {
+    super();
     this.#film = film;
   }
 
@@ -162,15 +162,13 @@ export default class FilmDetailsView {
     return createFilmDetailsTemplate(this.#film);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setCloseClickHandler = (callback) => {
+    this._callback.closeClick = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+  };
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.setCloseClickHandler();
+  };
 }

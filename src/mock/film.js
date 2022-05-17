@@ -1,6 +1,6 @@
-import {getRandomInteger, generateRandomItem, generateDate} from '../util.js';
-import {COMMENTS_MAX_COUNT, FILMS} from '../const.js';
-import {generateComment} from './comment.js';
+import {getRandomInteger, generateRandomItem, generateDate} from '../util';
+import {COMMENTS_MAX_COUNT, FILMS} from '../const';
+import {generateComment} from './comment';
 
 const generateCommentList = () => {
   const commentsCount = getRandomInteger(0, COMMENTS_MAX_COUNT);

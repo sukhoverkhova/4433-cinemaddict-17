@@ -1,5 +1,5 @@
-import {generateRandomItem, generateDate} from '../util.js';
-import {AUTHORS, COMMENTS, EMOTIONS} from '../const.js';
+import {generateRandomItem, generateDate} from '../util';
+import {AUTHORS, COMMENTS, EMOTIONS} from '../const';
 
 export const generateComment = () => ({
   id: 0,

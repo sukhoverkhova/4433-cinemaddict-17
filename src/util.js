@@ -1,5 +1,5 @@
 import dayjs from 'dayjs';
-import {ESCAPE_KEY} from './const.js';
+import {ESCAPE_KEY} from './const';
 
 const getRandomInteger = (a = 0, b = 1) => {
   const lower = Math.ceil(Math.min(a, b));

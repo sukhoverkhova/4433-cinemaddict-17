@@ -1,6 +1,6 @@
-import {createElement} from '../render.js';
-import {getYearOfDate} from '../util.js';
-import {COMMENTS_MAX_LENGTH} from '../const.js';
+import AbstractView from '../framework/view/abstract-stateful-view';
+import {getYearOfDate} from '../util';
+import {COMMENTS_MAX_LENGTH} from '../const';
 
 const createFilmTemplate = (film) => {
   const filmInfo = film.filmInfo;
@@ -41,11 +41,11 @@ const createFilmTemplate = (film) => {
   );
 };
 
-export default class FilmView {
-  #element = null;
+export default class FilmView extends AbstractView {
   #film = null;
 
   constructor(film) {
+    super();
     this.#film = film;
   }
 
@@ -53,15 +53,13 @@ export default class FilmView {
     return createFilmTemplate(this.#film);
   }
 
-  get element() {
-    if (!this.#element) {
-      this.#element = createElement(this.template);
-    }
+  setOpenPopupClickHandler = (callback) => {
+    this._callback.openPopupClick = callback;
+    this.element.addEventListener('click', this.#clickHandler);
+  };
 
-    return this.#element;
-  }
-
-  removeElement() {
-    this.#element = null;
-  }
+  #clickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.openPopupClick();
+  };
 }
