@@ -35,9 +35,7 @@ export default class FilmListPresenter {
     this.#renderFilmList();
   };
 
-  #handleShowMoreButtonClick = (evt) => {
-    evt.preventDefault();
-
+  #handleShowMoreButtonClick = () => {
     this.#films
       .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILMS_COUNT_PER_STEP)
       .forEach((film) => this.#renderFilm(film));
@@ -85,7 +83,7 @@ export default class FilmListPresenter {
       document.body.classList.add(OVERFLOW_HIDDEN_CLASS);
     };
 
-    filmComponent.element.addEventListener('click', () => {
+    filmComponent.setOpenPopupClickHandler(() => {
       showFilmDetails();
       document.addEventListener('keydown', onEscKeyDown);
     });
@@ -111,7 +109,7 @@ export default class FilmListPresenter {
       if (this.#films.length > FILMS_COUNT_PER_STEP) {
         render(this.#showMoreButtonCompoment, this.#mainContainer);
 
-        this.#showMoreButtonCompoment.element.addEventListener('click', this.#handleShowMoreButtonClick);
+        this.#showMoreButtonCompoment.setClickHandler(this.#handleShowMoreButtonClick);
       }
     }
   };
