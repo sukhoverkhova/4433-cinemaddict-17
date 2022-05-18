@@ -1,3 +1,4 @@
+import {render, RenderPosition, replace, remove} from '../framework/render.js';
 import FilmsListContainerView from '../view/films-list-container-view';
 import FilmsListSectionView from '../view/films-list-section-view';
 import FilmsListHeaderView from '../view/films-list-header-view';
@@ -8,18 +9,21 @@ import NoFilmsView from '../view/no-films-view';
 import SortView from '../view/sort-view';
 import ShowMoreButtonView from '../view/show-more-button-view';
 
-import {render} from '../render';
 import {isEscapeKey} from '../util';
 import {OVERFLOW_HIDDEN_CLASS, FILMS_COUNT_PER_STEP} from '../const';
 
 export default class FilmListPresenter {
   #mainContainer = null;
   #filmsModel = null;
+  #filmDetailsComponent = null;
 
   #filmsListContainerComponent = new FilmsListContainerView();
   #filmsListSectionComponent = new FilmsListSectionView();
   #filmsListComponent = new FilmsListView();
   #showMoreButtonCompoment = new ShowMoreButtonView();
+  #sortComponent = new SortView();
+  #noFilmsComponent = new NoFilmsView();
+  #filmsListHeaderComponent = new FilmsListHeaderView();
 
   #films = [];
   #renderedFilmCount = FILMS_COUNT_PER_STEP;
@@ -33,6 +37,39 @@ export default class FilmListPresenter {
     this.#films = [...this.#filmsModel.films];
 
     this.#renderFilmList();
+  };
+
+  #renderSort = () => {
+    render(this.#sortComponent, this.#mainContainer);
+  };
+
+  #renderNoFilms = () => {
+    render(this.#noFilmsComponent, this.#mainContainer);
+  };
+
+  #renderFilmsListContainer = () => {
+    render(this.#filmsListContainerComponent, this.#mainContainer);
+  };
+
+  #renderFilmsListSection = () => {
+    render(this.#filmsListSectionComponent, this.#filmsListContainerComponent.element);
+  };
+
+  #renderFilmsListHeader = () => {
+    render(this.#filmsListHeaderComponent, this.#filmsListSectionComponent.element);
+  };
+
+  #renderFilmsList = () => {
+    render(this.#filmsListComponent, this.#filmsListSectionComponent.element);
+  };
+
+  #renderShowMore = () => {
+    render(this.#showMoreButtonCompoment, this.#mainContainer);
+  };
+
+  #renderFilmDetails = (film) => {
+    this.#filmDetailsComponent = new FilmDetailsView(film);
+    render(this.#filmDetailsComponent, this.#mainContainer);
   };
 
   #handleShowMoreButtonClick = () => {
@@ -50,11 +87,10 @@ export default class FilmListPresenter {
 
   #renderFilm = (film) => {
     const filmComponent = new FilmView(film);
-    let filmDetailsComponent;
 
     const hideFilmDetails = () => {
-      filmDetailsComponent.element.remove();
-      filmDetailsComponent.removeElement();
+      this.#filmDetailsComponent.element.remove();
+      this.#filmDetailsComponent.removeElement();
       document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
     };
 
@@ -72,10 +108,9 @@ export default class FilmListPresenter {
         oldFilmDetailsElement.remove();
       }
 
-      filmDetailsComponent = new FilmDetailsView(film);
-      render(filmDetailsComponent, this.#mainContainer);
+      this.#renderFilmDetails(film);
 
-      filmDetailsComponent.element.querySelector('.film-details__close-btn').addEventListener('click', () => {
+      this.#filmDetailsComponent.setCloseClickHandler(() => {
         hideFilmDetails();
         document.removeEventListener('keydown', onEscKeyDown);
       });
@@ -93,21 +128,20 @@ export default class FilmListPresenter {
 
   #renderFilmList = () => {
     if (this.#films.length === 0) {
-      render(new NoFilmsView(), this.#mainContainer);
+      this.#renderNoFilms();
     } else {
-      render(new SortView(), this.#mainContainer);
-      render(this.#filmsListContainerComponent, this.#mainContainer);
-      render(this.#filmsListSectionComponent, this.#filmsListContainerComponent.element);
-
-      render(new FilmsListHeaderView(), this.#filmsListSectionComponent.element);
-      render(this.#filmsListComponent, this.#filmsListSectionComponent.element);
+      this.#renderSort();
+      this.#renderFilmsListContainer();
+      this.#renderFilmsListSection();
+      this.#renderFilmsListHeader();
+      this.#renderFilmsList();
 
       for (let i = 0; i < Math.min(this.#films.length, FILMS_COUNT_PER_STEP); i++) {
         this.#renderFilm(this.#films[i]);
       }
 
       if (this.#films.length > FILMS_COUNT_PER_STEP) {
-        render(this.#showMoreButtonCompoment, this.#mainContainer);
+        this.#renderShowMore();
 
         this.#showMoreButtonCompoment.setClickHandler(this.#handleShowMoreButtonClick);
       }

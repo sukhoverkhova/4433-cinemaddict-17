@@ -1,7 +1,7 @@
+import {render} from './framework/render';
 import MainNavigationView from './view/main-navigation-view';
 import UserProfileView from './view/user-profile-view';
 import FilmListPresenter from './presenter/films-list-presenter';
-import {render} from './render';
 import FilmsModel from './model/films-model';
 
 const siteHeaderElement = document.querySelector('.header');
