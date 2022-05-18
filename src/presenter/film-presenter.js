@@ -6,7 +6,6 @@ export default class FilmPresenter {
   #filmListContainer = null;
   #mainContainer = null;
 
-  #filmDetailsComponent = null;
   #filmComponent = null;
 
   #film = null;

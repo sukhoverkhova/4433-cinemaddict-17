@@ -5,20 +5,19 @@ import FilmsListHeaderView from '../view/films-list-header-view';
 import FilmsListView from '../view/films-list-view';
 import NoFilmsView from '../view/no-films-view';
 import SortView from '../view/sort-view';
-import ShowMoreButtonView from '../view/show-more-button-view';
+
 import FilmPresenter from './film-presenter';
+import ShowMorePresenter from './show-more-presenter';
 
 import {FILMS_COUNT_PER_STEP} from '../const';
 
 export default class FilmListPresenter {
   #mainContainer = null;
   #filmsModel = null;
-  #filmDetailsComponent = null;
 
   #filmsListContainerComponent = new FilmsListContainerView();
   #filmsListSectionComponent = new FilmsListSectionView();
   #filmsListComponent = new FilmsListView();
-  #showMoreButtonCompoment = new ShowMoreButtonView();
   #sortComponent = new SortView();
   #noFilmsComponent = new NoFilmsView();
   #filmsListHeaderComponent = new FilmsListHeaderView();
@@ -61,23 +60,6 @@ export default class FilmListPresenter {
     render(this.#filmsListComponent, this.#filmsListSectionComponent.element);
   };
 
-  #renderShowMore = () => {
-    render(this.#showMoreButtonCompoment, this.#mainContainer);
-  };
-
-  #handleShowMoreButtonClick = () => {
-    this.#films
-      .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILMS_COUNT_PER_STEP)
-      .forEach((film) => this.#renderFilm(film));
-
-    this.#renderedFilmCount += FILMS_COUNT_PER_STEP;
-
-    if (this.#renderedFilmCount >= this.#films.length) {
-      this.#showMoreButtonCompoment.element.remove();
-      this.#showMoreButtonCompoment.removeElement();
-    }
-  };
-
   #renderFilm = (film) => {
     const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer);
     filmPresenter.init(film);
@@ -98,9 +80,8 @@ export default class FilmListPresenter {
       }
 
       if (this.#films.length > FILMS_COUNT_PER_STEP) {
-        this.#renderShowMore();
-
-        this.#showMoreButtonCompoment.setClickHandler(this.#handleShowMoreButtonClick);
+        const showMorePresenter = new ShowMorePresenter(this.#filmsListComponent, this.#mainContainer, this.#films);
+        showMorePresenter.init();
       }
     }
   };

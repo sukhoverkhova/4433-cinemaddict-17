@@ -1,5 +1,6 @@
 import {render} from '../framework/render.js';
 import FilmDetailsView from '../view/film-details-view';
+
 import {isEscapeKey} from '../util';
 import {OVERFLOW_HIDDEN_CLASS} from '../const';
 
