@@ -1,16 +1,14 @@
-import {render, RenderPosition, replace, remove} from '../framework/render.js';
+import {render} from '../framework/render.js';
 import FilmsListContainerView from '../view/films-list-container-view';
 import FilmsListSectionView from '../view/films-list-section-view';
 import FilmsListHeaderView from '../view/films-list-header-view';
 import FilmsListView from '../view/films-list-view';
-import FilmView from '../view/film-view';
-import FilmDetailsView from '../view/film-details-view';
 import NoFilmsView from '../view/no-films-view';
 import SortView from '../view/sort-view';
 import ShowMoreButtonView from '../view/show-more-button-view';
+import FilmPresenter from './film-presenter';
 
-import {isEscapeKey} from '../util';
-import {OVERFLOW_HIDDEN_CLASS, FILMS_COUNT_PER_STEP} from '../const';
+import {FILMS_COUNT_PER_STEP} from '../const';
 
 export default class FilmListPresenter {
   #mainContainer = null;
@@ -67,11 +65,6 @@ export default class FilmListPresenter {
     render(this.#showMoreButtonCompoment, this.#mainContainer);
   };
 
-  #renderFilmDetails = (film) => {
-    this.#filmDetailsComponent = new FilmDetailsView(film);
-    render(this.#filmDetailsComponent, this.#mainContainer);
-  };
-
   #handleShowMoreButtonClick = () => {
     this.#films
       .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILMS_COUNT_PER_STEP)
@@ -86,44 +79,8 @@ export default class FilmListPresenter {
   };
 
   #renderFilm = (film) => {
-    const filmComponent = new FilmView(film);
-
-    const hideFilmDetails = () => {
-      this.#filmDetailsComponent.element.remove();
-      this.#filmDetailsComponent.removeElement();
-      document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
-    };
-
-    const onEscKeyDown = (evt) => {
-      if (isEscapeKey) {
-        evt.preventDefault();
-        hideFilmDetails();
-        document.removeEventListener('keydown', onEscKeyDown);
-      }
-    };
-
-    const showFilmDetails = () => {
-      const oldFilmDetailsElement = document.querySelector('.film-details');
-      if (oldFilmDetailsElement) {
-        oldFilmDetailsElement.remove();
-      }
-
-      this.#renderFilmDetails(film);
-
-      this.#filmDetailsComponent.setCloseClickHandler(() => {
-        hideFilmDetails();
-        document.removeEventListener('keydown', onEscKeyDown);
-      });
-
-      document.body.classList.add(OVERFLOW_HIDDEN_CLASS);
-    };
-
-    filmComponent.setOpenPopupClickHandler(() => {
-      showFilmDetails();
-      document.addEventListener('keydown', onEscKeyDown);
-    });
-
-    render(filmComponent, this.#filmsListComponent.element);
+    const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer);
+    filmPresenter.init(film);
   };
 
   #renderFilmList = () => {
