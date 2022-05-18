@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, remove} from '../framework/render.js';
 import FilmView from '../view/film-view';
 import FilmDetailsPresenter from './film-details-presenter';
 
@@ -18,10 +18,18 @@ export default class FilmPresenter {
   init = (film) => {
     this.#film = film;
 
+    const prevFilmComponent = this.#filmComponent;
+
     this.#filmComponent = new FilmView(film);
     this.#filmComponent.setOpenPopupClickHandler(this.#handleClick);
 
-    render(this.#filmComponent, this.#filmListContainer.element);
+    if (prevFilmComponent === null) {
+      render(this.#filmComponent, this.#filmListContainer.element);
+    }
+  };
+
+  destroy = () => {
+    remove(this.#filmComponent);
   };
 
   #showFilmDetails = () => {
