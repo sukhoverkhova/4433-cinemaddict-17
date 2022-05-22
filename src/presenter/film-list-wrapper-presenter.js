@@ -7,15 +7,15 @@ import SortView from '../view/sort-view';
 
 import FilmListPresenter from './films-list-presenter';
 
-export default class PagePresenter {
+export default class FilmListWrapper {
   #mainContainer = null;
   #filmsModel = null;
 
-  #filmsListContainerComponent = new FilmsListContainerView();
-  #filmsListSectionComponent = new FilmsListSectionView();
-  #sortComponent = new SortView();
-  #noFilmsComponent = new NoFilmsView();
-  #filmsListHeaderComponent = new FilmsListHeaderView();
+  #filmsListContainerComponent = null;
+  #filmsListSectionComponent = null;
+  #sortComponent = null;
+  #noFilmsComponent = null;
+  #filmsListHeaderComponent = null;
 
   #films = [];
 
@@ -27,7 +27,13 @@ export default class PagePresenter {
   init = () => {
     this.#films = [...this.#filmsModel.films];
 
-    this.#renderFilmList();
+    this.#filmsListContainerComponent = new FilmsListContainerView();
+    this.#filmsListSectionComponent = new FilmsListSectionView();
+    this.#sortComponent = new SortView();
+    this.#noFilmsComponent = new NoFilmsView();
+    this.#filmsListHeaderComponent = new FilmsListHeaderView();
+
+    this.#renderFilmListWrapper();
   };
 
   #renderSort = () => {
@@ -50,7 +56,7 @@ export default class PagePresenter {
     render(this.#filmsListHeaderComponent, this.#filmsListSectionComponent.element);
   };
 
-  #renderFilmList = () => {
+  #renderFilmListWrapper = () => {
     if (this.#films.length === 0) {
       this.#renderNoFilms();
     } else {

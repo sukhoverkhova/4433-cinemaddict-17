@@ -12,7 +12,9 @@ export default class FilmListPresenter {
   #filmsListSection = null;
 
   #filmsListComponent = new FilmsListView();
+  #showMorePresenter = null;
   #films = [];
+  #filmPresenter = new Map();
 
   constructor(mainContainer, filmsListSection, filmsModel) {
     this.#mainContainer = mainContainer;
@@ -22,6 +24,7 @@ export default class FilmListPresenter {
 
   init = () => {
     this.#films = [...this.#filmsModel.films];
+    this.#showMorePresenter = new ShowMorePresenter(this.#filmsListComponent, this.#mainContainer, this.#films);
 
     this.#renderFilmList();
   };
@@ -33,6 +36,13 @@ export default class FilmListPresenter {
   #renderFilm = (film) => {
     const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer);
     filmPresenter.init(film);
+    this.#filmPresenter.set(film.id, filmPresenter);
+  };
+
+  #clearFilmList = () => {
+    this.#filmPresenter.forEach((presenter) => presenter.destroy());
+    this.#filmPresenter.clear();
+    this.#showMorePresenter.destroy();
   };
 
   #renderFilmList = () => {
@@ -43,8 +53,7 @@ export default class FilmListPresenter {
     }
 
     if (this.#films.length > FILMS_COUNT_PER_STEP) {
-      const showMorePresenter = new ShowMorePresenter(this.#filmsListComponent, this.#mainContainer, this.#films);
-      showMorePresenter.init();
+      this.#showMorePresenter.init();
     }
   };
 }

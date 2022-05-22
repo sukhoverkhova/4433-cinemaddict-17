@@ -1,11 +1,10 @@
-import {render, remove} from '../framework/render.js';
+import {render, remove, replace} from '../framework/render.js';
 import FilmView from '../view/film-view';
 import FilmDetailsPresenter from './film-details-presenter';
 
 export default class FilmPresenter {
   #filmListContainer = null;
   #mainContainer = null;
-
   #filmComponent = null;
 
   #film = null;
@@ -25,7 +24,14 @@ export default class FilmPresenter {
 
     if (prevFilmComponent === null) {
       render(this.#filmComponent, this.#filmListContainer.element);
+      return;
     }
+
+    if (this.#filmListContainer.contains(prevFilmComponent.element)) {
+      replace(this.#filmComponent, prevFilmComponent);
+    }
+
+    remove(prevFilmComponent);
   };
 
   destroy = () => {
