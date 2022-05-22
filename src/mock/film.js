@@ -24,4 +24,3 @@ export const generateFilm = () => ({
     favorite: Boolean(getRandomInteger(0, 1))
   }
 });
-

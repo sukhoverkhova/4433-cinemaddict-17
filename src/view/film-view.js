@@ -55,10 +55,20 @@ export default class FilmView extends AbstractView {
 
   setOpenPopupClickHandler = (callback) => {
     this._callback.openPopupClick = callback;
-    this.element.addEventListener('click', this.#clickHandler);
+    this.element.addEventListener('click', this.#openPopupClickHandler);
   };
 
-  #clickHandler = (evt) => {
+  #openPopupClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.openPopupClick();
+  };
+
+  setFilmOptionsClickHandler = (callback) => {
+    this._callback.openPopupClick = callback;
+    this.element.addEventListener('click', this.#filmOptionsClickHandler);
+  };
+
+  #filmOptionsClickHandler = (evt) => {
     evt.preventDefault();
     this._callback.openPopupClick();
   };
