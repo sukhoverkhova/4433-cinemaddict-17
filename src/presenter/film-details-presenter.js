@@ -6,12 +6,14 @@ import {OVERFLOW_HIDDEN_CLASS} from '../const';
 
 export default class FilmDetailsPresenter {
   #mainContainer = null;
+  #changeData = null;
 
   #filmDetailsComponent = null;
   #film = null;
 
-  constructor(mainContainer) {
+  constructor(mainContainer, changeData) {
     this.#mainContainer = mainContainer;
+    this.#changeData = changeData;
   }
 
   init = (film) => {
@@ -21,6 +23,9 @@ export default class FilmDetailsPresenter {
     this.#renderFilmDetails();
 
     this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
+    this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+    this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
+    this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
   };
 
   #hideFilmDetails = () => {
@@ -52,5 +57,17 @@ export default class FilmDetailsPresenter {
 
   #handleCloseClick = () => {
     this.#hideFilmDetails();
+  };
+
+  #handleFavoriteClick = () => {
+    this.#changeData({...this.#film, favorite: !this.#film.favorite});
+  };
+
+  #handletWatchedClick = () => {
+    this.#changeData({...this.#film, alreadyWatched: !this.#film.favorite});
+  };
+
+  #handleWatchListClick = () => {
+    this.#changeData({...this.#film, watchlist: !this.#film.favorite});
   };
 }

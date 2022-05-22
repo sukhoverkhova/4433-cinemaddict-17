@@ -2,6 +2,8 @@ import AbstractView from '../framework/view/abstract-stateful-view';
 import {getYearOfDate} from '../util';
 import {COMMENTS_MAX_LENGTH} from '../const';
 
+const ACTIVE_CLASS = 'film-card__controls-item--active';
+
 const createFilmTemplate = (film) => {
   const filmInfo = film.filmInfo;
   const filmComments = film.comments;
@@ -14,7 +16,7 @@ const createFilmTemplate = (film) => {
   };
 
   const getActiveCLassElement = (flag) => {
-    const elementClass = flag ? 'film-card__controls-item--active' : '';
+    const elementClass = flag ? ACTIVE_CLASS : '';
     return elementClass;
   };
 
@@ -43,6 +45,7 @@ const createFilmTemplate = (film) => {
 
 export default class FilmView extends AbstractView {
   #film = null;
+  #controlItem = null;
 
   constructor(film) {
     super();
@@ -63,13 +66,36 @@ export default class FilmView extends AbstractView {
     this._callback.openPopupClick();
   };
 
-  setFilmOptionsClickHandler = (callback) => {
-    this._callback.openPopupClick = callback;
-    this.element.addEventListener('click', this.#filmOptionsClickHandler);
+  setFavoriteClickHandler = (callback) => {
+    this._callback.favoriteClick = callback;
+    this.#controlItem = this.element.querySelector('.film-card__controls-item--favorite');
+    this.#controlItem.addEventListener('click', this.#favoriteClickHandler);
   };
 
-  #filmOptionsClickHandler = (evt) => {
+  #favoriteClickHandler = (evt) => {
     evt.preventDefault();
-    this._callback.openPopupClick();
+    this._callback.favoriteClick();
+  };
+
+  setWatchedClickHandler = (callback) => {
+    this._callback.watchedClick = callback;
+    this.#controlItem = this.element.querySelector('.film-card__controls-item--mark-as-watched');
+    this.#controlItem.addEventListener('click', this.#watchedClickHandler);
+  };
+
+  #watchedClickHandler = (evt) => {
+    evt.preventDefault();
+    this._callback.watchedClick();
+  };
+
+  setWatchListClickHandler = (callback) => {
+    this._callback.watchListClick = callback;
+    this.#controlItem = this.element.querySelector('.film-card__controls-item--add-to-watchlist');
+    this.#controlItem.addEventListener('click', this.#watchListClick);
+  };
+
+  #watchListClick = (evt) => {
+    evt.preventDefault();
+    this._callback.watchListClick();
   };
 }

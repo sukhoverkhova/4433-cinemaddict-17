@@ -4,6 +4,7 @@ import FilmsListView from '../view/films-list-view';
 import FilmPresenter from './film-presenter';
 import ShowMorePresenter from './show-more-presenter';
 
+import {updateItem} from '../util.js';
 import {FILMS_COUNT_PER_STEP} from '../const';
 
 export default class FilmListPresenter {
@@ -33,8 +34,13 @@ export default class FilmListPresenter {
     render(this.#filmsListComponent, this.#filmsListSection);
   };
 
+  #handleFilmChange = (updatedFilm) => {
+    this.#films = updateItem(this.#films, updatedFilm);
+    this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+  };
+
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer);
+    const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer, this.#handleFilmChange);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   };
