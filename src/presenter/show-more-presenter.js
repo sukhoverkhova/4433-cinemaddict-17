@@ -7,14 +7,18 @@ export default class ShowMorePresenter {
   #filmListContainer = null;
   #mainContainer = null;
   #showMoreButtonCompoment = null;
+  #changeData = null;
+  #filmPresenter = null;
 
   #films = [];
   #renderedFilmCount = FILMS_COUNT_PER_STEP;
 
-  constructor(filmListContainer, mainContainer, films) {
+  constructor(filmListContainer, mainContainer, films, changeData, filmPresenter) {
     this.#filmListContainer = filmListContainer;
     this.#mainContainer = mainContainer;
     this.#films = films;
+    this.#changeData = changeData;
+    this.#filmPresenter = filmPresenter;
   }
 
   init = () => {
@@ -25,8 +29,9 @@ export default class ShowMorePresenter {
   };
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmListContainer, this.#mainContainer);
+    const filmPresenter = new FilmPresenter(this.#filmListContainer, this.#mainContainer, this.#changeData);
     filmPresenter.init(film);
+    this.#filmPresenter.set(film.id, filmPresenter);
   };
 
   destroy = () => {

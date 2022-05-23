@@ -1,4 +1,4 @@
-import {render} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render.js';
 import FilmDetailsView from '../view/film-details-view';
 
 import {isEscapeKey} from '../util';
@@ -19,6 +19,8 @@ export default class FilmDetailsPresenter {
   init = (film) => {
     this.#film = film;
 
+    const prevFilmDetailsComponent = this.#filmDetailsComponent;
+
     this.#filmDetailsComponent = new FilmDetailsView(film);
     this.#renderFilmDetails();
 
@@ -26,6 +28,17 @@ export default class FilmDetailsPresenter {
     this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
     this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
     this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
+
+    if (prevFilmDetailsComponent === null) {
+      this.#renderFilmDetails();
+      return;
+    }
+
+    if (this.#mainContainer.element.contains(prevFilmDetailsComponent.element)) {
+      replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
+    }
+
+    remove(prevFilmDetailsComponent);
   };
 
   #hideFilmDetails = () => {
@@ -60,14 +73,17 @@ export default class FilmDetailsPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#film, favorite: !this.#film.favorite});
+    this.#film.userDetails.favorite = !this.#film.userDetails.favorite;
+    this.#changeData(this.#film);
   };
 
   #handletWatchedClick = () => {
-    this.#changeData({...this.#film, alreadyWatched: !this.#film.favorite});
+    this.#film.userDetails.alreadyWatched = !this.#film.userDetails.alreadyWatched;
+    this.#changeData(this.#film);
   };
 
   #handleWatchListClick = () => {
-    this.#changeData({...this.#film, watchlist: !this.#film.favorite});
+    this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
+    this.#changeData(this.#film);
   };
 }

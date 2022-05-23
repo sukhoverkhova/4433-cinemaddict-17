@@ -16,6 +16,7 @@ export default class FilmListPresenter {
   #showMorePresenter = null;
   #films = [];
   #filmPresenter = new Map();
+  #filmDetailsPresenter = null;
 
   constructor(mainContainer, filmsListSection, filmsModel) {
     this.#mainContainer = mainContainer;
@@ -25,9 +26,19 @@ export default class FilmListPresenter {
 
   init = () => {
     this.#films = [...this.#filmsModel.films];
-    this.#showMorePresenter = new ShowMorePresenter(this.#filmsListComponent, this.#mainContainer, this.#films);
+    this.#showMorePresenter = new ShowMorePresenter(
+      this.#filmsListComponent,
+      this.#mainContainer,
+      this.#films,
+      this.#handleFilmChange,
+      this.#filmPresenter
+    );
 
     this.#renderFilmList();
+  };
+
+  #getCurrentFilmDetailsPresenter = (filmDetailsPresenter) => {
+    this.#filmDetailsPresenter = filmDetailsPresenter;
   };
 
   #renderFilmListWrapper = () => {
@@ -37,10 +48,11 @@ export default class FilmListPresenter {
   #handleFilmChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
     this.#filmPresenter.get(updatedFilm.id).init(updatedFilm);
+    this.#filmDetailsPresenter.init(updatedFilm);
   };
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer, this.#handleFilmChange);
+    const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer, this.#handleFilmChange, this.#getCurrentFilmDetailsPresenter);
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   };

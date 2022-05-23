@@ -7,13 +7,16 @@ export default class FilmPresenter {
   #mainContainer = null;
   #filmComponent = null;
   #changeData = null;
+  #filmDetailsPresenter = null;
+  #getCurrentFilmDetails = null;
 
   #film = null;
 
-  constructor(filmListContainer, mainContainer, changeData) {
+  constructor(filmListContainer, mainContainer, changeData, getCurrentFilmDetails) {
     this.#filmListContainer = filmListContainer;
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
+    this.#getCurrentFilmDetails = getCurrentFilmDetails;
   }
 
   init = (film) => {
@@ -45,20 +48,24 @@ export default class FilmPresenter {
   };
 
   #showFilmDetails = () => {
-    const filmDetailsPresenter = new FilmDetailsPresenter(this.#mainContainer, this.#changeData);
-    filmDetailsPresenter.init(this.#film);
+    this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#mainContainer, this.#changeData);
+    this.#filmDetailsPresenter.init(this.#film);
+    this.#getCurrentFilmDetails(this.#filmDetailsPresenter);
   };
 
   #handleFavoriteClick = () => {
-    this.#changeData({...this.#film, favorite: !this.#film.favorite});
+    this.#film.userDetails.favorite = !this.#film.userDetails.favorite;
+    this.#changeData(this.#film);
   };
 
   #handletWatchedClick = () => {
-    this.#changeData({...this.#film, alreadyWatched: !this.#film.favorite});
+    this.#film.userDetails.alreadyWatched = !this.#film.userDetails.alreadyWatched;
+    this.#changeData(this.#film);
   };
 
   #handleWatchListClick = () => {
-    this.#changeData({...this.#film, watchlist: !this.#film.favorite});
+    this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
+    this.#changeData(this.#film);
   };
 
   #handleClick = () => {
