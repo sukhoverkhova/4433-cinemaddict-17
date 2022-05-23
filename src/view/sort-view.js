@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-stateful-view';
-import {SortType} from '../const.js';
+import {SortType} from '../const';
 
 const ACTIVE_CLASS = 'sort__button--active';
 
@@ -26,8 +26,8 @@ export default class SortView extends AbstractView {
       return;
     }
 
-    this.element.querySelector('.sort__button--active').classList.remove('sort__button--active');
-    evt.target.classList.add('sort__button--active');
+    this.element.querySelector(`.${ACTIVE_CLASS}`).classList.remove(ACTIVE_CLASS);
+    evt.target.classList.add(ACTIVE_CLASS);
 
     evt.preventDefault();
     this._callback.sortTypeChange(evt.target.dataset.sortType);

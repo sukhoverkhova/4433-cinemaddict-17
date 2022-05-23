@@ -1,4 +1,4 @@
-import {render, remove} from '../framework/render.js';
+import {render, remove} from '../framework/render';
 import ShowMoreButtonView from '../view/show-more-button-view';
 import FilmPresenter from './film-presenter';
 import {FILMS_COUNT_PER_STEP} from '../const';
