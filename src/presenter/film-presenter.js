@@ -47,8 +47,12 @@ export default class FilmPresenter {
     remove(this.#filmComponent);
   };
 
+  #handleModeFilmDetails = () => {
+    this.#filmDetailsPresenter.resetView();
+  };
+
   #showFilmDetails = () => {
-    this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#mainContainer, this.#changeData);
+    this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#mainContainer, this.#changeData, this.#handleModeFilmDetails);
     this.#filmDetailsPresenter.init(this.#film);
     this.#getCurrentFilmDetails(this.#filmDetailsPresenter);
   };

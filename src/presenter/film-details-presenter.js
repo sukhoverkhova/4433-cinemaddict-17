@@ -4,16 +4,24 @@ import FilmDetailsView from '../view/film-details-view';
 import {isEscapeKey} from '../util';
 import {OVERFLOW_HIDDEN_CLASS} from '../const';
 
+const Mode = {
+  SHOWED: 'SHOWED',
+  HIDDEN: 'HIDDEN',
+};
+
 export default class FilmDetailsPresenter {
   #mainContainer = null;
   #changeData = null;
+  #changeModeFilmDetails = null;
 
   #filmDetailsComponent = null;
   #film = null;
+  #mode = Mode.HIDDEN;
 
-  constructor(mainContainer, changeData) {
+  constructor(mainContainer, changeData, changeModeFilmDetails) {
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
+    this.#changeModeFilmDetails = changeModeFilmDetails;
   }
 
   init = (film) => {
@@ -34,11 +42,17 @@ export default class FilmDetailsPresenter {
       return;
     }
 
-    if (this.#mainContainer.element.contains(prevFilmDetailsComponent.element)) {
+    if (this.#mode === 'SHOWED') {
       replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
     }
 
     remove(prevFilmDetailsComponent);
+  };
+
+  resetView = () => {
+    if (this.#mode !== Mode.HIDDEN) {
+      this.#hideFilmDetails();
+    }
   };
 
   #hideFilmDetails = () => {
@@ -46,6 +60,8 @@ export default class FilmDetailsPresenter {
     this.#filmDetailsComponent.removeElement();
     document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
     document.removeEventListener('keydown', this.#onEscKeyDownHandler);
+
+    this.#mode = Mode.HIDDEN;
   };
 
   #renderFilmDetails = () => {
