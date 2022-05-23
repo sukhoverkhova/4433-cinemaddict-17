@@ -1,6 +1,7 @@
 import {getRandomInteger, generateRandomItem, generateDate} from '../util';
 import {COMMENTS_MAX_COUNT, FILMS} from '../const';
 import {generateComment} from './comment';
+import {nanoid} from 'nanoid';
 
 const generateCommentList = () => {
   const commentsCount = getRandomInteger(0, COMMENTS_MAX_COUNT);
@@ -14,7 +15,7 @@ const generateCommentList = () => {
 };
 
 export const generateFilm = () => ({
-  id: 0,
+  id: nanoid(),
   comments: generateCommentList(),
   filmInfo: generateRandomItem(FILMS),
   userDetails: {
@@ -24,4 +25,3 @@ export const generateFilm = () => ({
     favorite: Boolean(getRandomInteger(0, 1))
   }
 });
-

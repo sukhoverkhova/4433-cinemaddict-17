@@ -33,4 +33,18 @@ const humanizeDate = (date) => dayjs(date).format('D MMMM YYYY');
 
 const isEscapeKey = (evt) => evt.key === ESCAPE_KEY;
 
-export {getRandomInteger, generateRandomItem, generateDate, getYearOfDate, humanizeDate, isEscapeKey};
+const updateItem = (items, update) => {
+  const index = items.findIndex((item) => item.id === update.id);
+
+  if (index === -1) {
+    return items;
+  }
+
+  return [
+    ...items.slice(0, index),
+    update,
+    ...items.slice(index + 1),
+  ];
+};
+
+export {getRandomInteger, generateRandomItem, generateDate, getYearOfDate, humanizeDate, isEscapeKey, updateItem};
