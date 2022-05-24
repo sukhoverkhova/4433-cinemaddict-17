@@ -9,16 +9,18 @@ export default class ShowMorePresenter {
   #showMoreButtonCompoment = null;
   #changeData = null;
   #filmPresenter = null;
+  #getRenderedFilmsCount = null;
 
   #films = [];
   #renderedFilmCount = FILMS_COUNT_PER_STEP;
 
-  constructor(filmListContainer, mainContainer, films, changeData, filmPresenter) {
+  constructor(filmListContainer, mainContainer, films, changeData, filmPresenter, getRenderedFilmsCount) {
     this.#filmListContainer = filmListContainer;
     this.#mainContainer = mainContainer;
     this.#films = films;
     this.#changeData = changeData;
     this.#filmPresenter = filmPresenter;
+    this.#getRenderedFilmsCount = getRenderedFilmsCount;
   }
 
   init = () => {
@@ -45,6 +47,8 @@ export default class ShowMorePresenter {
       .forEach((film) => this.#renderFilm(film));
 
     this.#renderedFilmCount += FILMS_COUNT_PER_STEP;
+
+    this.#getRenderedFilmsCount(this.#renderedFilmCount);
 
     if (this.#renderedFilmCount >= this.#films.length) {
       this.#showMoreButtonCompoment.element.remove();

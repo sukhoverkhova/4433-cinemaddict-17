@@ -32,6 +32,8 @@ export default class FilmListPresenter {
 
   #films = [];
 
+  #renderedFilmCount = FILMS_COUNT_PER_STEP;
+
   constructor(mainContainer, filmsModel) {
     this.#mainContainer = mainContainer;
     this.#filmsModel = filmsModel;
@@ -45,7 +47,8 @@ export default class FilmListPresenter {
       this.#mainContainer,
       this.#films,
       this.#handleFilmChange,
-      this.#filmPresenter
+      this.#filmPresenter,
+      this.#getRenderedFilmsCount
     );
 
     this.#sourcedBoardFilms = [...this.#filmsModel.films];
@@ -103,6 +106,10 @@ export default class FilmListPresenter {
     this.#filmDetailsPresenter = filmDetailsPresenter;
   };
 
+  #getRenderedFilmsCount = (filmCount) => {
+    this.#renderedFilmCount = filmCount;
+  };
+
   #handleFilmChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
     this.#sourcedBoardFilms = updateItem(this.#sourcedBoardFilms, updatedFilm);
@@ -125,11 +132,14 @@ export default class FilmListPresenter {
   #renderFilmList = () => {
     render(this.#filmsListComponent, this.#filmsListSectionComponent.element);
 
-    for (let i = 0; i < Math.min(this.#films.length, FILMS_COUNT_PER_STEP); i++) {
+    console.log(this.#renderedFilmCount);
+    console.log(this.#films.length);
+
+    for (let i = 0; i < Math.min(this.#films.length, this.#renderedFilmCount); i++) {
       this.#renderFilm(this.#films[i]);
     }
 
-    if (this.#films.length > FILMS_COUNT_PER_STEP) {
+    if (this.#films.length > this.#renderedFilmCount) {
       this.#showMorePresenter.init();
     }
   };
