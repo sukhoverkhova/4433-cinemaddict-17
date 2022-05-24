@@ -18,9 +18,9 @@ export const EMOTIONS = ['smile', 'sleeping', 'puke', 'angry'];
 
 export const FILMS = [
   {
-    title: 'A Little Pony Without The Carpet',
+    title: 'Зеленая миля',
     alternativeTitle: 'Laziness Who Sold Themselves',
-    totalRating: 8.8,
+    totalRating: 9.9,
     poster: 'images/posters/made-for-each-other.png',
     ageRating: 0,
     director: 'Tom Ford',
@@ -31,7 +31,7 @@ export const FILMS = [
       'Morgan Freeman'
     ],
     release: {
-      date: '2019-05-11T00:00:00.000Z',
+      date: '2013-05-11T00:00:00.000Z',
       releaseCountry: 'Finland'
     },
     runtime: 'Tom Ford',
@@ -41,9 +41,9 @@ export const FILMS = [
     description: 'Oscar-winning film, a war drama about two young people, from the creators of timeless classic "Nu, Pogodi!" and "Alice in Wonderland", with the best fight scenes since Bruce Lee.',
   },
   {
-    title: 'Moana',
+    title: 'Список Шиндлера',
     alternativeTitle: 'The ocean is calling',
-    totalRating: 6.7,
+    totalRating: 8.8,
     poster: 'images/posters/popeye-meets-sinbad.png',
     ageRating: 8,
     director: 'Ron Clements',
@@ -58,7 +58,7 @@ export const FILMS = [
       'Jemaine Clement'
     ],
     release: {
-      date: '2016-05-11T00:00:00.000Z',
+      date: '2014-05-11T00:00:00.000Z',
       releaseCountry: 'USA'
     },
     runtime: 'Ron Clements',
@@ -68,10 +68,64 @@ export const FILMS = [
     description: 'In Ancient Polynesia, when a terrible curse incurred by the Demigod Maui reaches Moanas island, she answers the Oceans call to seek out the Demigod to set things right.',
   },
   {
-    title: 'Tangled',
+    title: 'Побег из  Шоушенка',
     alternativeTitle: 'Theyre taking adventure to new lengths.',
-    totalRating: 9.1,
-    poster: 'images/posters/the-man-with-the-golden-arm.jpg',
+    totalRating: 8.7,
+    poster: 'images/posters/sagebrush-trail.jpg',
+    ageRating: 8,
+    director: 'Ron Clements',
+    writers: [
+      'Dan Fogelman'
+    ],
+    actors: [
+      'Mandy Moore',
+      'Zachary Levi',
+      'Donna Murphy',
+      'Ron Perlman',
+      'M.C. Gainey'
+    ],
+    release: {
+      date: '2015-05-11T00:00:00.000Z',
+      releaseCountry: 'USA'
+    },
+    runtime: 'Ron Clements',
+    genre: [
+      'Animation'
+    ],
+    description: 'After receiving the healing powers from a magical flower, the baby Princess Rapunzel is kidnapped from the palace in the middle of the night by Mother Gothel.',
+  },
+  {
+    title: 'Властелин Колец: Возвращение короля',
+    alternativeTitle: 'Theyre taking adventure to new lengths.',
+    totalRating: 8.5,
+    poster: 'images/posters/santa-claus-conquers-the-martians.jpg',
+    ageRating: 8,
+    director: 'Ron Clements',
+    writers: [
+      'Dan Fogelman'
+    ],
+    actors: [
+      'Mandy Moore',
+      'Zachary Levi',
+      'Donna Murphy',
+      'Ron Perlman',
+      'M.C. Gainey'
+    ],
+    release: {
+      date: '2016-05-11T00:00:00.000Z',
+      releaseCountry: 'USA'
+    },
+    runtime: 'Ron Clements',
+    genre: [
+      'Animation'
+    ],
+    description: 'After receiving the healing powers from a magical flower, the baby Princess Rapunzel is kidnapped from the palace in the middle of the night by Mother Gothel.',
+  },
+  {
+    title: 'Форрест Гамп',
+    alternativeTitle: 'Theyre taking adventure to new lengths.',
+    totalRating: 8.1,
+    poster: 'images/posters/the-dance-of-life.jpg',
     ageRating: 8,
     director: 'Ron Clements',
     writers: [
@@ -93,6 +147,33 @@ export const FILMS = [
       'Animation'
     ],
     description: 'After receiving the healing powers from a magical flower, the baby Princess Rapunzel is kidnapped from the palace in the middle of the night by Mother Gothel.',
+  },
+  {
+    title: '1+1',
+    alternativeTitle: 'Theyre taking adventure to new lengths.',
+    totalRating: 9.1,
+    poster: 'images/posters/the-great-flamarion.jpg',
+    ageRating: 8,
+    director: 'Ron Clements',
+    writers: [
+      'Dan Fogelman'
+    ],
+    actors: [
+      'Mandy Moore',
+      'Zachary Levi',
+      'Donna Murphy',
+      'Ron Perlman',
+      'M.C. Gainey'
+    ],
+    release: {
+      date: '2018-05-11T00:00:00.000Z',
+      releaseCountry: 'USA'
+    },
+    runtime: 'Ron Clements',
+    genre: [
+      'Animation'
+    ],
+    description: 'After receiving the healing powers from a magical flower, the baby Princess Rapunzel is kidnapped from the palace in the middle of the night by Mother Gothel.',
   }
 ];
 
@@ -103,3 +184,9 @@ export const FILMS_COUNT_PER_STEP = 5;
 
 export const ESCAPE_KEY = 'Escape';
 export const OVERFLOW_HIDDEN_CLASS = 'hide-overflow';
+
+export const SortType = {
+  DEFAULT: 'default',
+  DATE: 'date',
+  RATING: 'rating',
+};

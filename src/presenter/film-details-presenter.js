@@ -1,4 +1,4 @@
-import {render, replace, remove} from '../framework/render.js';
+import {render, replace, remove} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
 
 import {isEscapeKey} from '../util';
