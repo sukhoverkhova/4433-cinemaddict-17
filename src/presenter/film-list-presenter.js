@@ -132,9 +132,6 @@ export default class FilmListPresenter {
   #renderFilmList = () => {
     render(this.#filmsListComponent, this.#filmsListSectionComponent.element);
 
-    console.log(this.#renderedFilmCount);
-    console.log(this.#films.length);
-
     for (let i = 0; i < Math.min(this.#films.length, this.#renderedFilmCount); i++) {
       this.#renderFilm(this.#films[i]);
     }
