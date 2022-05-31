@@ -251,4 +251,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
       emojiItems[i].addEventListener('input', this.#selectEmojiHandler);
     }
   };
+
+  reset = (film) => {
+    this.updateElement(
+      FilmDetailsView.parseFilmToState(film),
+    );
+  };
 }
