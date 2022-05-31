@@ -1,3 +1,5 @@
+import {getRandomInteger} from './util';
+
 export const AUTHORS = [
   'Ilya OReilly',
   'Anna Engelmann',
@@ -34,7 +36,7 @@ export const FILMS = [
       date: '2013-05-11T00:00:00.000Z',
       releaseCountry: 'Finland'
     },
-    runtime: 'Tom Ford',
+    runtime: getRandomInteger(15, 120),
     genre: [
       'Comedy'
     ],
@@ -61,7 +63,7 @@ export const FILMS = [
       date: '2014-05-11T00:00:00.000Z',
       releaseCountry: 'USA'
     },
-    runtime: 'Ron Clements',
+    runtime: getRandomInteger(15, 120),
     genre: [
       'Animation'
     ],
@@ -88,7 +90,7 @@ export const FILMS = [
       date: '2015-05-11T00:00:00.000Z',
       releaseCountry: 'USA'
     },
-    runtime: 'Ron Clements',
+    runtime: getRandomInteger(15, 120),
     genre: [
       'Animation'
     ],
@@ -115,7 +117,7 @@ export const FILMS = [
       date: '2016-05-11T00:00:00.000Z',
       releaseCountry: 'USA'
     },
-    runtime: 'Ron Clements',
+    runtime: getRandomInteger(15, 120),
     genre: [
       'Animation'
     ],
@@ -142,7 +144,7 @@ export const FILMS = [
       date: '2019-05-11T00:00:00.000Z',
       releaseCountry: 'USA'
     },
-    runtime: 'Ron Clements',
+    runtime: getRandomInteger(15, 120),
     genre: [
       'Animation'
     ],
@@ -169,7 +171,7 @@ export const FILMS = [
       date: '2018-05-11T00:00:00.000Z',
       releaseCountry: 'USA'
     },
-    runtime: 'Ron Clements',
+    runtime: getRandomInteger(15, 120),
     genre: [
       'Animation'
     ],

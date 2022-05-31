@@ -15,21 +15,25 @@ export const generateRandomItem = (array) => {
 };
 
 export const generateDate = () => {
-  const isDate = Boolean(getRandomInteger(0, 1));
-
-  if (!isDate) {
-    return null;
-  }
-
   const maxDaysGap = 7;
   const daysGap = getRandomInteger(-maxDaysGap, maxDaysGap);
 
   return dayjs().add(daysGap, 'day').toDate();
 };
 
+export const minutesToHours = (minutesCount) => {
+  const minutes = minutesCount % 60;
+  const hours = (minutesCount > 60) ? Math.floor(minutesCount / 60) : 0;
+
+  const hoursResult = (hours > 0) ? `${hours}h ` : '';
+  const minutesResult = (minutes > 0) ? `${minutes}m` : '';
+
+  return hoursResult + minutesResult;
+};
+
 export const getYearOfDate = (date) => dayjs(date).format('YYYY');
 
-export const humanizeDate = (date) => dayjs(date).format('D MMMM YYYY');
+export const humanizeDate = (date, format = 'D MMMM YYYY') => dayjs(date).format(format);
 
 export const isEscapeKey = (evt) => evt.key === ESCAPE_KEY;
 
