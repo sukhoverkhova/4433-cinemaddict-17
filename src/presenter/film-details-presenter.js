@@ -30,8 +30,6 @@ export default class FilmDetailsPresenter {
     if (this.#filmDetailsComponent !== null) {
       this.#filmDetailsComponent.updateFilm(film);
     } else {
-      const prevFilmDetailsComponent = this.#filmDetailsComponent;
-
       this.#filmDetailsComponent = new FilmDetailsView(film);
       this.#filmDetailsComponent.reset(this.#film);
       this.#renderFilmDetails();
@@ -41,16 +39,7 @@ export default class FilmDetailsPresenter {
       this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
       this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
 
-      if (prevFilmDetailsComponent === null) {
-        this.#renderFilmDetails();
-        return;
-      }
-
-      if (this.#mode === 'SHOWED') {
-        replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
-      }
-
-      remove(prevFilmDetailsComponent);
+      this.#renderFilmDetails();
     }
   };
 
