@@ -27,27 +27,31 @@ export default class FilmDetailsPresenter {
   init = (film) => {
     this.#film = film;
 
-    const prevFilmDetailsComponent = this.#filmDetailsComponent;
+    if (this.#filmDetailsComponent !== null) {
+      this.#filmDetailsComponent.updateFilm(film);
+    } else {
+      const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
-    this.#filmDetailsComponent = new FilmDetailsView(film);
-    this.#filmDetailsComponent.reset(this.#film);
-    this.#renderFilmDetails();
-
-    this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
-    this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
-    this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
-
-    if (prevFilmDetailsComponent === null) {
+      this.#filmDetailsComponent = new FilmDetailsView(film);
+      this.#filmDetailsComponent.reset(this.#film);
       this.#renderFilmDetails();
-      return;
-    }
 
-    if (this.#mode === 'SHOWED') {
-      replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
-    }
+      this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
+      this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+      this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
+      this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
 
-    remove(prevFilmDetailsComponent);
+      if (prevFilmDetailsComponent === null) {
+        this.#renderFilmDetails();
+        return;
+      }
+
+      if (this.#mode === 'SHOWED') {
+        replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
+      }
+
+      remove(prevFilmDetailsComponent);
+    }
   };
 
   resetView = () => {

@@ -180,9 +180,17 @@ export default class FilmDetailsView extends AbstractStatefulView {
   }
 
   _restoreHandlers = () => {
-    t his.#setInnerHandlers();
+    this.#setInnerHandlers();
 
     this.element.scrollTo(0, this._state.scrollPosition);
+  };
+
+  updateFilm = (film) => {
+    this.updateElement({
+      ...film,
+      selectedEmojiType: this._state.selectedEmojiType,
+      scrollPosition: this.element.scrollTop
+    });
   };
 
   static parseFilmToState = (film) => ({...film,
@@ -193,10 +201,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
   setCloseClickHandler = (callback) => {
     this._callback.closeClick = callback;
     this.#closeButtonElement = this.element.querySelector('.film-details__close-btn');
-    this.#closeButtonElement.addEventListener('click', this.#closeClisk);
+    this.#closeButtonElement.addEventListener('click', this.#closeClick);
   };
 
-  #closeClisk = (evt) => {
+  #closeClick = (evt) => {
     evt.preventDefault();
     this._callback.closeClick();
   };
@@ -254,10 +262,11 @@ export default class FilmDetailsView extends AbstractStatefulView {
       emojiItems[i].addEventListener('input', this.#selectEmojiHandler);
     }
 
-    this.element.querySelector('.film-details__close-btn').addEventListener('click', this.#closeClisk);
-    this.element.querySelector('.film-details__control-button--favorite').addEventListener('click', this.#favoriteClickHandler);
-    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedClickHandler);
-    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchListClick);
+    this.setCloseClickHandler(this._callback.closeClick);
+
+    this.setFavoriteClickHandler(this._callback.favoriteClick);
+    this.setWatchedClickHandler(this._callback.watchedClick);
+    this.setWatchListClickHandler(this._callback.watchListClick);
   };
 
   reset = (film) => {
