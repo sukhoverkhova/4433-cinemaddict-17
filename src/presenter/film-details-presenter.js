@@ -30,6 +30,7 @@ export default class FilmDetailsPresenter {
     const prevFilmDetailsComponent = this.#filmDetailsComponent;
 
     this.#filmDetailsComponent = new FilmDetailsView(film);
+    this.#filmDetailsComponent.reset(this.#film);
     this.#renderFilmDetails();
 
     this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
@@ -51,7 +52,6 @@ export default class FilmDetailsPresenter {
 
   resetView = () => {
     if (this.#mode !== Mode.HIDDEN) {
-      this.#filmDetailsComponent.reset(this.#film);
       this.#hideFilmDetails();
     }
   };
@@ -81,7 +81,6 @@ export default class FilmDetailsPresenter {
   #onEscKeyDownHandler = (evt) => {
     if (isEscapeKey) {
       evt.preventDefault();
-      this.#filmDetailsComponent.reset(this.#film);
       this.#hideFilmDetails();
     }
   };
