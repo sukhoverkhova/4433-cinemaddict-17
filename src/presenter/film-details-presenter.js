@@ -1,4 +1,4 @@
-import {render, replace, remove} from '../framework/render';
+import {render} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
 
 import {isEscapeKey} from '../util';
@@ -27,26 +27,20 @@ export default class FilmDetailsPresenter {
   init = (film) => {
     this.#film = film;
 
-    const prevFilmDetailsComponent = this.#filmDetailsComponent;
-
-    this.#filmDetailsComponent = new FilmDetailsView(film);
-    this.#renderFilmDetails();
-
-    this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
-    this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
-    this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
-
-    if (prevFilmDetailsComponent === null) {
+    if (this.#filmDetailsComponent !== null) {
+      this.#filmDetailsComponent.updateFilm(film);
+    } else {
+      this.#filmDetailsComponent = new FilmDetailsView(film);
+      this.#filmDetailsComponent.reset(this.#film);
       this.#renderFilmDetails();
-      return;
-    }
 
-    if (this.#mode === 'SHOWED') {
-      replace(this.#filmDetailsComponent, prevFilmDetailsComponent);
-    }
+      this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
+      this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
+      this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
+      this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
 
-    remove(prevFilmDetailsComponent);
+      this.#renderFilmDetails();
+    }
   };
 
   resetView = () => {
