@@ -187,6 +187,19 @@ export const FILMS_COUNT_PER_STEP = 5;
 export const ESCAPE_KEY = 'Escape';
 export const OVERFLOW_HIDDEN_CLASS = 'hide-overflow';
 
+export const FilterType = {
+  ALL: 'all',
+  WATCHLIST: 'watchlist',
+  HISTORY: 'history',
+  FAVORITES: 'favorites'
+};
+
+export const UpdateType = {
+  PATCH: 'PATCH',
+  MINOR: 'MINOR',
+  MAJOR: 'MAJOR',
+};
+
 export const SortType = {
   DEFAULT: 'default',
   DATE: 'date',
