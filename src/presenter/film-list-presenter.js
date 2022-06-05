@@ -1,13 +1,13 @@
-import {render} from '../framework/render';
+import {render, remove} from '../framework/render';
 import FilmsListContainerView from '../view/films-list-container-view';
 import FilmsListSectionView from '../view/films-list-section-view';
 import FilmsListHeaderView from '../view/films-list-header-view';
 import NoFilmsView from '../view/no-films-view';
 import SortView from '../view/sort-view';
 import FilmsListView from '../view/films-list-view';
+import ShowMoreButtonView from '../view/show-more-button-view';
 
 import FilmPresenter from './film-presenter';
-import ShowMorePresenter from './show-more-presenter';
 
 import {updateItem, sortFilmByDate, sortFilmsByRating} from '../util';
 import {FILMS_COUNT_PER_STEP, SortType} from '../const';
@@ -22,7 +22,7 @@ export default class FilmListPresenter {
   #noFilmsComponent = new NoFilmsView();
   #filmsListHeaderComponent = new FilmsListHeaderView();
   #filmsListComponent = new FilmsListView();
-  #showMorePresenter = null;
+  #showMoreButtonCompoment = null;
 
   #filmPresenter = new Map();
   #filmDetailsPresenter = null;
@@ -40,20 +40,22 @@ export default class FilmListPresenter {
   }
 
   get films() {
+    switch (this.#currentSortType) {
+      case SortType.DATE:
+        this.#films.sort(sortFilmByDate);
+        break;
+      case SortType.RATING:
+        this.#films.sort(sortFilmsByRating);
+        break;
+      default:
+        this.#films = [...this.#sourcedBoardFilms];
+    }
+
     return this.#filmsModel.tasks;
   }
 
   init = () => {
     this.#films = [...this.#filmsModel.films];
-
-    this.#showMorePresenter = new ShowMorePresenter(
-      this.#filmsListComponent,
-      this.#mainContainer,
-      this.#films,
-      this.#handleFilmChange,
-      this.#filmPresenter,
-      this.#getRenderedFilmsCount
-    );
 
     this.#sourcedBoardFilms = [...this.#filmsModel.films];
 
@@ -110,10 +112,6 @@ export default class FilmListPresenter {
     this.#filmDetailsPresenter = filmDetailsPresenter;
   };
 
-  #getRenderedFilmsCount = (filmCount) => {
-    this.#renderedFilmCount = filmCount;
-  };
-
   #handleFilmChange = (updatedFilm) => {
     this.#films = updateItem(this.#films, updatedFilm);
     this.#sourcedBoardFilms = updateItem(this.#sourcedBoardFilms, updatedFilm);
@@ -130,7 +128,29 @@ export default class FilmListPresenter {
   #clearFilmList = () => {
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
     this.#filmPresenter.clear();
-    this.#showMorePresenter.destroy();
+    this.#showMoreButtonCompoment.destroyShowMoreButton();
+  };
+
+  #handleShowMoreClick = () => {
+    this.#showMoreFilms();
+  };
+
+  #showMoreFilms = () => {
+    this.#films
+      .slice(this.#renderedFilmCount, this.#renderedFilmCount + FILMS_COUNT_PER_STEP)
+      .forEach((film) => this.#renderFilm(film));
+
+    this.#renderedFilmCount += FILMS_COUNT_PER_STEP;
+
+    if (this.#renderedFilmCount >= this.#films.length) {
+      this.#showMoreButtonCompoment.element.remove();
+      this.#showMoreButtonCompoment.removeElement();
+    }
+  };
+
+  destroyShowMoreButton = () => {
+    this.#renderedFilmCount = FILMS_COUNT_PER_STEP;
+    remove(this.#showMoreButtonCompoment);
   };
 
   #renderFilmList = () => {
@@ -141,7 +161,10 @@ export default class FilmListPresenter {
     }
 
     if (this.#films.length > this.#renderedFilmCount) {
-      this.#showMorePresenter.init();
+      this.#showMoreButtonCompoment = new ShowMoreButtonView();
+
+      render(this.#showMoreButtonCompoment, this.#mainContainer);
+      this.#showMoreButtonCompoment.setClickHandler(this.#handleShowMoreClick);
     }
   };
 
