@@ -187,6 +187,12 @@ export const FILMS_COUNT_PER_STEP = 5;
 export const ESCAPE_KEY = 'Escape';
 export const OVERFLOW_HIDDEN_CLASS = 'hide-overflow';
 
+export const UserAction = {
+  UPDATE_FILM: 'UPDATE_FILM',
+  ADD_COMMENT: 'ADD_COMMENT',
+  DELETE_COMMENT: 'DELETE_COMMENT'
+};
+
 export const FilterType = {
   ALL: 'all',
   WATCHLIST: 'watchlist',

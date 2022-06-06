@@ -1,6 +1,7 @@
 import {render, remove, replace} from '../framework/render';
 import FilmView from '../view/film-view';
 import FilmDetailsPresenter from './film-details-presenter';
+import {UserAction, UpdateType} from '../const.js';
 
 export default class FilmPresenter {
   #filmListContainer = null;
@@ -58,18 +59,27 @@ export default class FilmPresenter {
   };
 
   #handleFavoriteClick = () => {
-    this.#film.userDetails.favorite = !this.#film.userDetails.favorite;
-    this.#changeData(this.#film);
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, userDetails: {...this.#film.userDetails, watchlist: !this.#film.userDetails.favorite}},
+    );
   };
 
   #handletWatchedClick = () => {
-    this.#film.userDetails.alreadyWatched = !this.#film.userDetails.alreadyWatched;
-    this.#changeData(this.#film);
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, userDetails: {...this.#film.userDetails, watchlist: !this.#film.userDetails.alreadyWatched}},
+    );
   };
 
   #handleWatchListClick = () => {
-    this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
-    this.#changeData(this.#film);
+    this.#changeData(
+      UserAction.UPDATE_FILM,
+      UpdateType.MINOR,
+      {...this.#film, userDetails: {...this.#film.userDetails, watchlist: !this.#film.userDetails.watchlist}},
+    );
   };
 
   #handleClick = () => {

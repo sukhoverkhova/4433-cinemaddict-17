@@ -6,7 +6,7 @@ const createFilterItemTemplate = (filter, currentFilterType) => {
   return (
     `<a
     href="#${type}"
-    class="main-navigation__item main-navigation__item--active
+    class="main-navigation__item
     ${type === currentFilterType ? 'main-navigation__item--active' : ''}">
       ${name} <span class="main-navigation__item-count">${count}</span>
     </a>
