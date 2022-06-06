@@ -20,7 +20,6 @@ export default class FilmListPresenter {
 
   #filmsListContainerComponent = new FilmsListContainerView();
   #filmsListSectionComponent = new FilmsListSectionView();
-  // #sortComponent = new SortView();
   #noFilmsComponent = new NoFilmsView();
   #filmsListHeaderComponent = new FilmsListHeaderView();
   #filmsListComponent = new FilmsListView();
@@ -42,8 +41,7 @@ export default class FilmListPresenter {
     this.#filterModel = filterModel;
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
-
-    // this.#filterModel.addObserver(this.#handleModelEvent);
+    this.#filterModel.addObserver(this.#handleModelEvent);
   }
 
   get films() {

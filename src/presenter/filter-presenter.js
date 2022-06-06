@@ -71,6 +71,8 @@ export default class FilmPresenter {
       return;
     }
 
+    console.log(filterType);
+
     this.#filterModel.setFilter(UpdateType.MAJOR, filterType);
   };
 }
