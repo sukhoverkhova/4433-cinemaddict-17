@@ -10,7 +10,7 @@ import ShowMoreButtonView from '../view/show-more-button-view';
 import FilmPresenter from './film-presenter';
 
 import {sortFilmByDate, sortFilmsByRating} from '../util';
-import {FILMS_COUNT_PER_STEP, SortType, UpdateType, UserAction} from '../const';
+import {FILMS_COUNT_PER_STEP, SortType, UpdateType, UserAction, FilterType} from '../const';
 import {filter} from '../filter';
 
 export default class FilmListPresenter {
@@ -20,13 +20,13 @@ export default class FilmListPresenter {
 
   #filmsListContainerComponent = new FilmsListContainerView();
   #filmsListSectionComponent = new FilmsListSectionView();
-  #noFilmsComponent = new NoFilmsView();
+  #noFilmsComponent = null;
   #filmsListHeaderComponent = new FilmsListHeaderView();
   #filmsListComponent = new FilmsListView();
 
   #showMoreButtonCompoment = null;
   #sortComponent = null;
-
+  #filterType = FilterType.ALL;
 
   #filmPresenter = new Map();
   #filmDetailsPresenter = null;
@@ -45,9 +45,9 @@ export default class FilmListPresenter {
   }
 
   get films() {
-    const filterType = this.#filterModel.filter;
+    this.#filterType = this.#filterModel.filter;
     const films = this.#filmsModel.films;
-    const filteredFilms = filter[filterType](films);
+    const filteredFilms = filter[this.#filterType](films);
 
     switch (this.#currentSortType) {
       case SortType.DATE:
@@ -161,6 +161,11 @@ export default class FilmListPresenter {
     this.#showMoreButtonCompoment.setClickHandler(this.#handleShowMoreClick);
   };
 
+  #renderNoFilms = () => {
+    this.#noFilmsComponent = new NoFilmsView(this.#filterType);
+    render(this.#noFilmsComponent, this.#mainContainer);
+  };
+
   #renderFilmItems = (films) => {
     films.forEach((film) => this.#renderFilm(film));
   };
@@ -176,7 +181,7 @@ export default class FilmListPresenter {
     const filmsCount = films.length;
 
     if (filmsCount === 0) {
-      render(this.#noFilmsComponent, this.#mainContainer);
+      this.#renderNoFilms();
       return;
     }
 
