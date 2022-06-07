@@ -35,7 +35,7 @@ export const getYearOfDate = (date) => dayjs(date).format('YYYY');
 
 export const humanizeDate = (date, format = 'D MMMM YYYY') => dayjs(date).format(format);
 
-export const isEscapeKey = (evt) => evt.key === 'Escape';
+export const isEscapeKey = (evt) => evt.key === ESCAPE_KEY;
 
 export const getWeightForNullDate = (itemA, itemB) => {
   if (itemA === null && itemB === null) {
