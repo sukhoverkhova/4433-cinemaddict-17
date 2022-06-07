@@ -196,7 +196,7 @@ export const UserAction = {
 export const FilterType = {
   ALL: 'all',
   WATCHLIST: 'watchlist',
-  HISTORY: 'history',
+  ALREADY_WATCHED: 'alreadyWatched',
   FAVORITES: 'favorites'
 };
 

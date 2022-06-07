@@ -71,7 +71,7 @@ export default class FilmListPresenter {
     }
 
     this.#currentSortType = sortType;
-    this.#clearFilmList({resetRenderedTaskCount: true});
+    this.#clearFilmList({resetRenderedFilmCount: true});
     this.#renderPage();
   };
 
@@ -110,13 +110,13 @@ export default class FilmListPresenter {
         this.#renderPage();
         break;
       case UpdateType.MAJOR:
-        this.#clearFilmList({resetRenderedTaskCount: true, resetSortType: true});
+        this.#clearFilmList({resetRenderedFilmCount: true, resetSortType: true});
         this.#renderPage();
         break;
     }
   };
 
-  #clearFilmList = ({resetRenderedfilmCount = false, resetSortType = false} = {}) => {
+  #clearFilmList = ({resetRenderedFilmCount = false, resetSortType = false} = {}) => {
     const filmCount = this.films.length;
 
     this.#filmPresenter.forEach((presenter) => presenter.destroy());
@@ -126,7 +126,7 @@ export default class FilmListPresenter {
     remove(this.#noFilmsComponent);
     remove(this.#showMoreButtonCompoment);
 
-    if (resetRenderedfilmCount) {
+    if (resetRenderedFilmCount) {
       this.#renderedFilmCount = FILMS_COUNT_PER_STEP;
     } else {
       this.#renderedFilmCount = Math.min(filmCount, this.#renderedFilmCount);

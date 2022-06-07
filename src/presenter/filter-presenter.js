@@ -34,9 +34,9 @@ export default class FilmPresenter {
         count: filter[FilterType.WATCHLIST](films).length,
       },
       {
-        type: FilterType.HISTORY,
+        type: FilterType.ALREADY_WATCHED,
         name: 'History',
-        count: filter[FilterType.HISTORY](films).length,
+        count: filter[FilterType.ALREADY_WATCHED](films).length,
       },
       {
         type: FilterType.FAVORITES,
