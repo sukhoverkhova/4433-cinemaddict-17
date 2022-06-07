@@ -2,26 +2,18 @@ import {render} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
 
 import {isEscapeKey} from '../util';
-import {OVERFLOW_HIDDEN_CLASS} from '../const';
-
-const Mode = {
-  SHOWED: 'SHOWED',
-  HIDDEN: 'HIDDEN',
-};
+import {OVERFLOW_HIDDEN_CLASS, UpdateType, UserAction} from '../const';
 
 export default class FilmDetailsPresenter {
   #mainContainer = null;
   #changeData = null;
-  #changeModeFilmDetails = null;
 
   #filmDetailsComponent = null;
   #film = null;
-  #mode = Mode.HIDDEN;
 
-  constructor(mainContainer, changeData, changeModeFilmDetails) {
+  constructor(mainContainer, changeData) {
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
-    this.#changeModeFilmDetails = changeModeFilmDetails;
   }
 
   init = (film) => {
@@ -39,13 +31,10 @@ export default class FilmDetailsPresenter {
       this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
       this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
 
-      this.#renderFilmDetails();
-    }
-  };
+      this.#filmDetailsComponent.setAddCommentHandler(this.#onAddComment);
+      this.#filmDetailsComponent.setDeleteCommentHandler(this.#onDeleteComment);
 
-  resetView = () => {
-    if (this.#mode !== Mode.HIDDEN) {
-      this.#hideFilmDetails();
+      this.#renderFilmDetails();
     }
   };
 
@@ -54,8 +43,6 @@ export default class FilmDetailsPresenter {
     this.#filmDetailsComponent.removeElement();
     document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
     document.removeEventListener('keydown', this.#onEscKeyDownHandler);
-
-    this.#mode = Mode.HIDDEN;
   };
 
   #renderFilmDetails = () => {
@@ -72,7 +59,7 @@ export default class FilmDetailsPresenter {
   };
 
   #onEscKeyDownHandler = (evt) => {
-    if (isEscapeKey) {
+    if (isEscapeKey(evt)) {
       evt.preventDefault();
       this.#hideFilmDetails();
     }
@@ -82,18 +69,43 @@ export default class FilmDetailsPresenter {
     this.#hideFilmDetails();
   };
 
-  #handleFavoriteClick = () => {
-    this.#film.userDetails.favorite = !this.#film.userDetails.favorite;
-    this.#changeData(this.#film);
+  #handleFavoriteClick = (update) => {
+    this.#changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      update
+    );
   };
 
-  #handletWatchedClick = () => {
-    this.#film.userDetails.alreadyWatched = !this.#film.userDetails.alreadyWatched;
-    this.#changeData(this.#film);
+  #handletWatchedClick = (update) => {
+    this.#changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      update
+    );
   };
 
-  #handleWatchListClick = () => {
-    this.#film.userDetails.watchlist = !this.#film.userDetails.watchlist;
-    this.#changeData(this.#film);
+  #handleWatchListClick = (update) => {
+    this.#changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      update
+    );
+  };
+
+  #onAddComment = (update) => {
+    this.#changeData(
+      UserAction.ADD_COMMENT,
+      UpdateType.PATCH,
+      update
+    );
+  };
+
+  #onDeleteComment = (update) => {
+    this.#changeData(
+      UserAction.DELETE_COMMENT,
+      UpdateType.PATCH,
+      update
+    );
   };
 }
