@@ -284,7 +284,13 @@ export default class FilmDetailsView extends AbstractStatefulView {
       const updatedFilm = FilmDetailsView.parseStateToFilm(this._state, {action: 'add'});
       this._callback.addComment(updatedFilm);
 
-      this.updateFilm(updatedFilm);
+      this.updateElement({
+        ...updatedFilm,
+        selectedEmojiType: null,
+        scrollPosition: this.element.scrollTop,
+        comment: null,
+      });
+
       this._restoreHandlers();
     }
   };
