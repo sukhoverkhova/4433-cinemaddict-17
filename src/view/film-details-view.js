@@ -2,6 +2,7 @@ import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {humanizeDate, minutesToHours, generateRandomItem, generateDate} from '../util';
 import {AUTHORS} from '../const';
 import {nanoid} from 'nanoid';
+import he from 'he';
 
 const ACTIVE_CLASS = 'film-details__control-button--active';
 
@@ -33,7 +34,7 @@ const createFilmDetailsTemplate = (data) => {
           <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
         </span>
         <div>
-          <p class="film-details__comment-text">${comment.comment}</p>
+          <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
             <span class="film-details__comment-day">${humanizeDate(comment.date, 'D MMMM YYYY HH:MM')}</span>
