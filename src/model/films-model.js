@@ -26,10 +26,6 @@ export default class FilmsModel extends Observable {
   };
 
   updateFilm = async (updateType, update) => {
-    delete update.scrollPosition;
-    delete update.selectedEmojiType;
-    delete update.comment;
-
     const index = this.#films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
