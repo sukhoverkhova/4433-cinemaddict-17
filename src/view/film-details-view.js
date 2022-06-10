@@ -1,7 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import {humanizeDate, minutesToHours, generateRandomItem, generateDate} from '../util';
-import {AUTHORS} from '../const';
-import {nanoid} from 'nanoid';
+import {humanizeDate, minutesToHours} from '../util';
 import he from 'he';
 
 const ACTIVE_CLASS = 'film-details__control-button--active';
@@ -355,8 +353,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
     if (payLoad.action === 'add' && film.selectedEmojiType && film.comment) {
       const addedComment = {
-        id: nanoid(),
-        author: generateRandomItem(AUTHORS),
         comment: film.comment,
         date: generateDate(),
         emotion: film.selectedEmojiType,
