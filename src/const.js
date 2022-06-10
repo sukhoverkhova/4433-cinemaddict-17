@@ -31,3 +31,6 @@ export const SortType = {
   DATE: 'date',
   RATING: 'rating',
 };
+
+export const AUTHORIZATION = 'Basic sdfsdfsdflsdkf';
+export const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';

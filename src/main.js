@@ -5,9 +5,7 @@ import FilterPresenter from './presenter/filter-presenter';
 import FilmsModel from './model/films-model';
 import FilterModel from './model/filter-model';
 import FilmsApiService from './film-api-service';
-
-const AUTHORIZATION = 'Basic fdhjfrtyyuiddd';
-const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';
+import {AUTHORIZATION, END_POINT} from './const';
 
 const siteHeaderElement = document.querySelector('.header');
 const siteMainElement = document.querySelector('.main');

@@ -26,6 +26,10 @@ export default class FilmsModel extends Observable {
   };
 
   updateFilm = async (updateType, update) => {
+    delete update.scrollPosition;
+    delete update.selectedEmojiType;
+    delete update.comment;
+
     const index = this.#films.findIndex((film) => film.id === update.id);
 
     if (index === -1) {
@@ -33,8 +37,9 @@ export default class FilmsModel extends Observable {
     }
 
     try {
-      const response = await this.#filmsApiService.updateTask(update);
+      const response = await this.#filmsApiService.updateFilm(update);
       const updatedFilm = this.#adaptToClient(response);
+
       this.#films = [
         ...this.#films.slice(0, index),
         updatedFilm,
@@ -43,7 +48,7 @@ export default class FilmsModel extends Observable {
 
       this._notify(updateType, updatedFilm);
     } catch(err) {
-      throw new Error('Can\'t update task');
+      throw new Error('Can\'t update film');
     }
   };
 
@@ -52,6 +57,7 @@ export default class FilmsModel extends Observable {
       alternativeTitle: film.film_info['alternative_title'],
       totalRating: film.film_info['total_rating'],
       ageRating: film.film_info['age_rating'],
+
       release: {
         ...film.film_info.release,
         releaseCountry: film.film_info.release['release_country'],

@@ -1,8 +1,10 @@
 import {render} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
+import CommentsModel from '../model/comments-model.js';
+import CommentsApiService from '../comments-api-service';
 
 import {isEscapeKey} from '../util';
-import {OVERFLOW_HIDDEN_CLASS, UpdateType, UserAction} from '../const';
+import {OVERFLOW_HIDDEN_CLASS, UpdateType, UserAction, AUTHORIZATION, END_POINT} from '../const';
 
 export default class FilmDetailsPresenter {
   #mainContainer = null;
@@ -10,6 +12,7 @@ export default class FilmDetailsPresenter {
 
   #filmDetailsComponent = null;
   #film = null;
+  #comments = null;
 
   constructor(mainContainer, changeData) {
     this.#mainContainer = mainContainer;
@@ -18,12 +21,26 @@ export default class FilmDetailsPresenter {
 
   init = (film) => {
     this.#film = film;
+    this.#loadComments(this.#film.id);
+  };
 
+  #loadComments = async (id) => {
+    const commentsModel = new CommentsModel(new CommentsApiService(END_POINT, AUTHORIZATION));
+
+    await commentsModel
+      .init(id)
+      .finally(() => {
+        this.#comments = commentsModel.comments;
+        this.#updateFilmDetails(this.#comments);
+      });
+  };
+
+  #updateFilmDetails = (comments) => {
     if (this.#filmDetailsComponent !== null) {
-      this.#filmDetailsComponent.updateFilm(film);
+      this.#filmDetailsComponent.updateFilm({...this.#film, commentList: comments});
     } else {
-      this.#filmDetailsComponent = new FilmDetailsView(film);
-      this.#filmDetailsComponent.reset(this.#film);
+      this.#filmDetailsComponent = new FilmDetailsView({...this.#film, commentList: comments});
+      this.#filmDetailsComponent.reset({...this.#film, commentList: comments});
       this.#renderFilmDetails();
 
       this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
@@ -71,7 +88,7 @@ export default class FilmDetailsPresenter {
 
   #handleFavoriteClick = (update) => {
     this.#changeData(
-      UserAction.ADD_COMMENT,
+      UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
       update
     );
@@ -79,7 +96,7 @@ export default class FilmDetailsPresenter {
 
   #handletWatchedClick = (update) => {
     this.#changeData(
-      UserAction.ADD_COMMENT,
+      UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
       update
     );
@@ -87,7 +104,7 @@ export default class FilmDetailsPresenter {
 
   #handleWatchListClick = (update) => {
     this.#changeData(
-      UserAction.ADD_COMMENT,
+      UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
       update
     );

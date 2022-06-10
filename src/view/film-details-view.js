@@ -1,6 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
 import {humanizeDate, minutesToHours} from '../util';
-import he from 'he';
+// import he from 'he';
 
 const ACTIVE_CLASS = 'film-details__control-button--active';
 
@@ -13,7 +13,7 @@ const EMOJI_ARRAY = {
 
 const createFilmDetailsTemplate = (data) => {
   const filmInfo = data.filmInfo;
-  const filmComments = data.comments;
+  const filmComments = data.commentList;
   const userDetails = data.userDetails;
   const smileType = data.selectedEmojiType;
   const commentText = data.comment;
@@ -32,7 +32,7 @@ const createFilmDetailsTemplate = (data) => {
           <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
         </span>
         <div>
-          <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
+          <p class="film-details__comment-text">${comment.comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
             <span class="film-details__comment-day">${humanizeDate(comment.date, 'D MMMM YYYY HH:MM')}</span>
@@ -94,7 +94,7 @@ const createFilmDetailsTemplate = (data) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
-                <td class="film-details__cell">USA</td>
+                <td class="film-details__cell">${filmInfo.release.releaseCountry}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
@@ -348,21 +348,20 @@ export default class FilmDetailsView extends AbstractStatefulView {
     comment: null,
   });
 
-  static parseStateToFilm = (state, payLoad) => {
+  static parseStateToFilm = (state, payload) => {
     const film = {...state};
 
-    if (payLoad.action === 'add' && film.selectedEmojiType && film.comment) {
+    if (payload.action === 'add' && film.selectedEmojiType && film.comment) {
       const addedComment = {
         comment: film.comment,
-        date: generateDate(),
         emotion: film.selectedEmojiType,
       };
 
       film.comments = [...film.comments, addedComment];
     }
 
-    if (payLoad.action === 'delete') {
-      const index = film.comments.findIndex((item) => item.id === payLoad.buttonId);
+    if (payload.action === 'delete') {
+      const index = film.comments.findIndex((item) => item.id === payload.buttonId);
 
       film.comments = [
         ...film.comments.slice(0, index),
@@ -370,15 +369,15 @@ export default class FilmDetailsView extends AbstractStatefulView {
       ];
     }
 
-    if (payLoad.action === 'watchListClick') {
+    if (payload.action === 'watchListClick') {
       film.userDetails.watchlist = !film.userDetails.watchlist;
     }
 
-    if (payLoad.action === 'watchedClick') {
+    if (payload.action === 'watchedClick') {
       film.userDetails.alreadyWatched = !film.userDetails.alreadyWatched;
     }
 
-    if (payLoad.action === 'favoriteClick') {
+    if (payload.action === 'favoriteClick') {
       film.userDetails.favorite = !film.userDetails.favorite;
     }
 
