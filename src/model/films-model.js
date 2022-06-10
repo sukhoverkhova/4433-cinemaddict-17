@@ -11,7 +11,7 @@ export default class FilmsModel extends Observable {
   }
 
   get films() {
-    return this.#films;
+    return [...this.#films];
   }
 
   init = async () => {
