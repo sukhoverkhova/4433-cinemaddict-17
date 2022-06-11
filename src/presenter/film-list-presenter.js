@@ -18,6 +18,7 @@ export default class FilmListPresenter {
   #mainContainer = null;
   #filmsModel = null;
   #filterModel = null;
+  #commentsModel = null;
   #noFilmsComponent = null;
   #showMoreButtonCompoment = null;
   #sortComponent = null;
@@ -35,10 +36,11 @@ export default class FilmListPresenter {
   #renderedFilmCount = FILMS_COUNT_PER_STEP;
   #isLoading = true;
 
-  constructor(mainContainer, filmsModel, filterModel) {
+  constructor(mainContainer, filmsModel, filterModel, commentsModel) {
     this.#mainContainer = mainContainer;
     this.#filmsModel = filmsModel;
     this.#filterModel = filterModel;
+    this.#commentsModel = commentsModel;
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
@@ -92,10 +94,10 @@ export default class FilmListPresenter {
         this.#filmsModel.updateFilm(updateType, update);
         break;
       case UserAction.ADD_COMMENT:
-        this.#filmsModel.updateFilm(updateType, update);
+        this.#commentsModel.addComment(updateType, update);
         break;
       case UserAction.DELETE_COMMENT:
-        this.#filmsModel.updateFilm(updateType, update);
+        this.#commentsModel.deleteComment(updateType, update);
         break;
     }
   };
@@ -181,7 +183,13 @@ export default class FilmListPresenter {
   };
 
   #renderFilm = (film) => {
-    const filmPresenter = new FilmPresenter(this.#filmsListComponent, this.#mainContainer, this.#handleViewAction, this.#getCurrentFilmDetailsPresenter);
+    const filmPresenter = new FilmPresenter(
+      this.#filmsListComponent,
+      this.#mainContainer,
+      this.#handleViewAction,
+      this.#getCurrentFilmDetailsPresenter,
+      this.#commentsModel
+    );
     filmPresenter.init(film);
     this.#filmPresenter.set(film.id, filmPresenter);
   };

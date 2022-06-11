@@ -13,10 +13,12 @@ export default class FilmDetailsPresenter {
   #filmDetailsComponent = null;
   #film = null;
   #comments = null;
+  #commentsModel = null;
 
-  constructor(mainContainer, changeData) {
+  constructor(mainContainer, changeData, commentsModel) {
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
+    this.#commentsModel = commentsModel;
   }
 
   init = (film) => {
@@ -25,12 +27,10 @@ export default class FilmDetailsPresenter {
   };
 
   #loadComments = async (id) => {
-    const commentsModel = new CommentsModel(new CommentsApiService(END_POINT, AUTHORIZATION));
-
-    await commentsModel
+    await this.#commentsModel
       .init(id)
       .finally(() => {
-        this.#comments = commentsModel.comments;
+        this.#comments = this.#commentsModel.comments;
         this.#updateFilmDetails(this.#comments);
       });
   };
