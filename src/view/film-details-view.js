@@ -15,8 +15,8 @@ const createFilmDetailsTemplate = (data) => {
   const filmInfo = data.filmInfo;
   const filmComments = data.commentList;
   const userDetails = data.userDetails;
-  const smileType = data.selectedEmojiType;
-  const commentText = data.comment;
+  const smileType = data.newComment.emotion;
+  const commentText = data.newComment.comment;
 
   const getActiveCLassElement = (flag) => {
     const elementClass = flag ? ACTIVE_CLASS : '';
@@ -184,9 +184,11 @@ export default class FilmDetailsView extends AbstractStatefulView {
   updateFilm = (film) => {
     this.updateElement({
       ...film,
-      selectedEmojiType: this._state.selectedEmojiType,
       scrollPosition: this.element.scrollTop,
-      comment: this._state.comment,
+      newComment: {
+        comment: this._state.newComment.text,
+        emotion: this._state.newComment.emotion,
+      }
     });
   };
 
@@ -208,13 +210,9 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
-
     this._state.userDetails.favorite = !this._state.userDetails.favorite;
 
     const updatedFilm = {...this._state};
-    delete updatedFilm.selectedEmojiType;
-    delete updatedFilm.comment;
-
     this._callback.watchListClick(updatedFilm);
     this.updateFilm(updatedFilm);
   };
@@ -226,13 +224,9 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   #watchedClickHandler = (evt) => {
     evt.preventDefault();
-
     this._state.userDetails.alreadyWatched = !this._state.userDetails.alreadyWatched;
 
     const updatedFilm = {...this._state};
-    delete updatedFilm.selectedEmojiType;
-    delete updatedFilm.comment;
-
     this._callback.watchListClick(updatedFilm);
     this.updateFilm(updatedFilm);
   };
@@ -244,23 +238,11 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   #watchListClick = (evt) => {
     evt.preventDefault();
-
     this._state.userDetails.watchlist = !this._state.userDetails.watchlist;
 
     const updatedFilm = {...this._state};
-    delete updatedFilm.selectedEmojiType;
-    delete updatedFilm.comment;
-
     this._callback.watchListClick(updatedFilm);
     this.updateFilm(updatedFilm);
-  };
-
-  #commentInputHandler = (evt) => {
-    evt.preventDefault();
-
-    this._setState({
-      comment: evt.target.value,
-    });
   };
 
   #getEmojiType = (type) => type.replace('emoji-', '');
@@ -272,8 +254,21 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
     this.updateElement({
       scrollPosition: this.element.scrollTop,
-      selectedEmojiType: emojiType ? emojiType : null,
-      comment: this._state.comment,
+      newComment: {
+        comment: this._state.newComment.text,
+        emotion: emojiType ? emojiType : null,
+      }
+    });
+  };
+
+  #commentInputHandler = (evt) => {
+    evt.preventDefault();
+
+    this._setState({
+      newComment: {
+        comment: evt.target.value,
+        emotion: this._state.newComment.emotion,
+      }
     });
   };
 
@@ -286,25 +281,12 @@ export default class FilmDetailsView extends AbstractStatefulView {
     if (evt.ctrlKey && evt.key === 'Enter') {
       evt.preventDefault();
 
-      const updatedFilm = {...this._state};
-      delete updatedFilm.selectedEmojiType;
-      delete updatedFilm.comment;
-
-      const addedComment = {
-        comment: updatedFilm.comment,
-        emotion: updatedFilm.selectedEmojiType,
+      const newComment = {
+        comment: this._state.newComment.comment,
+        emotion: this._state.newComment.emotion,
       };
 
-      updatedFilm.comments = [...updatedFilm.comments, addedComment];
-
-      this._callback.addComment(updatedFilm);
-
-      this.updateElement({
-        ...updatedFilm,
-        selectedEmojiType: null,
-        scrollPosition: this.element.scrollTop,
-        comment: null,
-      });
+      this._callback.addComment({film: this._state, newComment: newComment});
     }
   };
 
@@ -320,21 +302,8 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   #onCommentDelete = (evt) => {
     evt.preventDefault();
-    const buttonId = evt.target.dataset.buttonid;
-
-    const updatedFilm = {...this._state};
-    delete updatedFilm.selectedEmojiType;
-    delete updatedFilm.comment;
-
-    const index = updatedFilm.comments.findIndex((item) => item.id === buttonId);
-
-    updatedFilm.comments = [
-      ...updatedFilm.comments.slice(0, index),
-      ...updatedFilm.comments.slice(index + 1),
-    ];
-
-    this._callback.deleteComment(updatedFilm);
-    this.updateFilm(updatedFilm);
+    const commentId = evt.target.dataset.buttonid;
+    this._callback.deleteComment({film: this._state, commentId});
   };
 
   #setInnerHandlers = () => {
@@ -366,9 +335,11 @@ export default class FilmDetailsView extends AbstractStatefulView {
   };
 
   static parseFilmToState = (film) => ({...film,
-    selectedEmojiType: null,
     scrollPosition: 0,
-    comment: null,
+    newComment: {
+      comment: null,
+      emotion: null,
+    }
   });
 
   reset = (film) => {

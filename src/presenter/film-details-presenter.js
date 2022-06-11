@@ -1,10 +1,8 @@
 import {render} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
-import CommentsModel from '../model/comments-model.js';
-import CommentsApiService from '../comments-api-service';
 
 import {isEscapeKey} from '../util';
-import {OVERFLOW_HIDDEN_CLASS, UpdateType, UserAction, AUTHORIZATION, END_POINT} from '../const';
+import {OVERFLOW_HIDDEN_CLASS, UpdateType, UserAction} from '../const';
 
 export default class FilmDetailsPresenter {
   #mainContainer = null;
@@ -50,6 +48,8 @@ export default class FilmDetailsPresenter {
 
       this.#filmDetailsComponent.setAddCommentHandler(this.#onAddComment);
       this.#filmDetailsComponent.setDeleteCommentHandler(this.#onDeleteComment);
+
+      this.#commentsModel.addObserver(this.#handleModelEvent);
 
       this.#renderFilmDetails();
     }
@@ -124,5 +124,9 @@ export default class FilmDetailsPresenter {
       UpdateType.PATCH,
       update
     );
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    this.#filmDetailsComponent.updateFilm(data);
   };
 }
