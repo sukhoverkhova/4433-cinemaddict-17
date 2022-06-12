@@ -1,8 +1,6 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import {humanizeDate, minutesToHours, generateRandomItem, generateDate} from '../util';
-import {AUTHORS} from '../const';
-import {nanoid} from 'nanoid';
-import he from 'he';
+import {humanizeDate, minutesToHours} from '../util';
+// import he from 'he';
 
 const ACTIVE_CLASS = 'film-details__control-button--active';
 
@@ -15,7 +13,7 @@ const EMOJI_ARRAY = {
 
 const createFilmDetailsTemplate = (data) => {
   const filmInfo = data.filmInfo;
-  const filmComments = data.comments;
+  const filmComments = data.commentList;
   const userDetails = data.userDetails;
   const smileType = data.selectedEmojiType;
   const commentText = data.comment;
@@ -34,7 +32,7 @@ const createFilmDetailsTemplate = (data) => {
           <img src="./images/emoji/${comment.emotion}.png" width="55" height="55" alt="emoji-smile">
         </span>
         <div>
-          <p class="film-details__comment-text">${he.encode(comment.comment)}</p>
+          <p class="film-details__comment-text">${comment.comment}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
             <span class="film-details__comment-day">${humanizeDate(comment.date, 'D MMMM YYYY HH:MM')}</span>
@@ -96,7 +94,7 @@ const createFilmDetailsTemplate = (data) => {
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Country</td>
-                <td class="film-details__cell">USA</td>
+                <td class="film-details__cell">${filmInfo.release.releaseCountry}</td>
               </tr>
               <tr class="film-details__row">
                 <td class="film-details__term">Genres</td>
@@ -211,11 +209,14 @@ export default class FilmDetailsView extends AbstractStatefulView {
   #favoriteClickHandler = (evt) => {
     evt.preventDefault();
 
-    const updatedFilm = FilmDetailsView.parseStateToFilm(this._state, {action: 'favoriteClick'});
-    this._callback.favoriteClick(updatedFilm);
+    this._state.userDetails.favorite = !this._state.userDetails.favorite;
 
+    const updatedFilm = {...this._state};
+    delete updatedFilm.selectedEmojiType;
+    delete updatedFilm.comment;
+
+    this._callback.watchListClick(updatedFilm);
     this.updateFilm(updatedFilm);
-    this._restoreHandlers();
   };
 
   setWatchedClickHandler = (callback) => {
@@ -226,11 +227,14 @@ export default class FilmDetailsView extends AbstractStatefulView {
   #watchedClickHandler = (evt) => {
     evt.preventDefault();
 
-    const updatedFilm = FilmDetailsView.parseStateToFilm(this._state, {action: 'watchedClick'});
-    this._callback.watchedClick(updatedFilm);
+    this._state.userDetails.alreadyWatched = !this._state.userDetails.alreadyWatched;
 
+    const updatedFilm = {...this._state};
+    delete updatedFilm.selectedEmojiType;
+    delete updatedFilm.comment;
+
+    this._callback.watchListClick(updatedFilm);
     this.updateFilm(updatedFilm);
-    this._restoreHandlers();
   };
 
   setWatchListClickHandler = (callback) => {
@@ -241,11 +245,14 @@ export default class FilmDetailsView extends AbstractStatefulView {
   #watchListClick = (evt) => {
     evt.preventDefault();
 
-    const updatedFilm = FilmDetailsView.parseStateToFilm(this._state, {action: 'watchListClick'});
-    this._callback.watchListClick(updatedFilm);
+    this._state.userDetails.watchlist = !this._state.userDetails.watchlist;
 
+    const updatedFilm = {...this._state};
+    delete updatedFilm.selectedEmojiType;
+    delete updatedFilm.comment;
+
+    this._callback.watchListClick(updatedFilm);
     this.updateFilm(updatedFilm);
-    this._restoreHandlers();
   };
 
   #commentInputHandler = (evt) => {
@@ -268,8 +275,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
       selectedEmojiType: emojiType ? emojiType : null,
       comment: this._state.comment,
     });
-
-    this._restoreHandlers();
   };
 
   setAddCommentHandler = (callback) => {
@@ -281,7 +286,17 @@ export default class FilmDetailsView extends AbstractStatefulView {
     if (evt.ctrlKey && evt.key === 'Enter') {
       evt.preventDefault();
 
-      const updatedFilm = FilmDetailsView.parseStateToFilm(this._state, {action: 'add'});
+      const updatedFilm = {...this._state};
+      delete updatedFilm.selectedEmojiType;
+      delete updatedFilm.comment;
+
+      const addedComment = {
+        comment: updatedFilm.comment,
+        emotion: updatedFilm.selectedEmojiType,
+      };
+
+      updatedFilm.comments = [...updatedFilm.comments, addedComment];
+
       this._callback.addComment(updatedFilm);
 
       this.updateElement({
@@ -290,8 +305,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
         scrollPosition: this.element.scrollTop,
         comment: null,
       });
-
-      this._restoreHandlers();
     }
   };
 
@@ -309,11 +322,19 @@ export default class FilmDetailsView extends AbstractStatefulView {
     evt.preventDefault();
     const buttonId = evt.target.dataset.buttonid;
 
-    const updatedFilm = FilmDetailsView.parseStateToFilm(this._state, {action: 'delete', buttonId: buttonId});
-    this._callback.deleteComment(updatedFilm);
+    const updatedFilm = {...this._state};
+    delete updatedFilm.selectedEmojiType;
+    delete updatedFilm.comment;
 
+    const index = updatedFilm.comments.findIndex((item) => item.id === buttonId);
+
+    updatedFilm.comments = [
+      ...updatedFilm.comments.slice(0, index),
+      ...updatedFilm.comments.slice(index + 1),
+    ];
+
+    this._callback.deleteComment(updatedFilm);
     this.updateFilm(updatedFilm);
-    this._restoreHandlers();
   };
 
   #setInnerHandlers = () => {
@@ -349,48 +370,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
     scrollPosition: 0,
     comment: null,
   });
-
-  static parseStateToFilm = (state, payLoad) => {
-    const film = {...state};
-
-    if (payLoad.action === 'add' && film.selectedEmojiType && film.comment) {
-      const addedComment = {
-        id: nanoid(),
-        author: generateRandomItem(AUTHORS),
-        comment: film.comment,
-        date: generateDate(),
-        emotion: film.selectedEmojiType,
-      };
-
-      film.comments = [...film.comments, addedComment];
-    }
-
-    if (payLoad.action === 'delete') {
-      const index = film.comments.findIndex((item) => item.id === payLoad.buttonId);
-
-      film.comments = [
-        ...film.comments.slice(0, index),
-        ...film.comments.slice(index + 1),
-      ];
-    }
-
-    if (payLoad.action === 'watchListClick') {
-      film.userDetails.watchlist = !film.userDetails.watchlist;
-    }
-
-    if (payLoad.action === 'watchedClick') {
-      film.userDetails.alreadyWatched = !film.userDetails.alreadyWatched;
-    }
-
-    if (payLoad.action === 'favoriteClick') {
-      film.userDetails.favorite = !film.userDetails.favorite;
-    }
-
-    delete film.selectedEmojiType;
-    delete film.comment;
-
-    return film;
-  };
 
   reset = (film) => {
     this.updateElement(

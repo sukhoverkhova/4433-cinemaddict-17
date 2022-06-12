@@ -1,5 +1,5 @@
 import AbstractView from '../framework/view/abstract-stateful-view';
-import {getYearOfDate} from '../util';
+import {getYearOfDate, minutesToHours} from '../util';
 import {COMMENTS_MAX_LENGTH} from '../const';
 
 const ACTIVE_CLASS = 'film-card__controls-item--active';
@@ -27,8 +27,8 @@ const createFilmTemplate = (film) => {
         <p class="film-card__rating">${filmInfo.totalRating}</p>
         <p class="film-card__info">
           <span class="film-card__year">${getYearOfDate(filmInfo.release.date)}</span>
-          <span class="film-card__duration">1h 55m</span>
-          <span class="film-card__genre">${filmInfo.genre}</span>
+          <span class="film-card__duration">${minutesToHours(filmInfo.runtime)}</span>
+          <span class="film-card__genre">${filmInfo.genre.join(', ')}</span>
         </p>
         <img src="./${filmInfo.poster}" alt="" class="film-card__poster">
         <p class="film-card__description">${(filmInfo.description > COMMENTS_MAX_LENGTH) ? filmInfo.description : cropDescription(filmInfo.description)}</p>
