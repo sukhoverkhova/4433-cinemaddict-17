@@ -106,7 +106,9 @@ export default class FilmDetailsPresenter {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
-      update
+      update,
+      () => {},
+      this.shakeControls(this.resetFilmState),
     );
   };
 
@@ -114,7 +116,9 @@ export default class FilmDetailsPresenter {
     this.#changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
-      update
+      update,
+      this.setSaving,
+      this.shakeComment(this.resetFilmState),
     );
   };
 
@@ -122,8 +126,51 @@ export default class FilmDetailsPresenter {
     this.#changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
-      update
+      update,
+      this.setDeleting,
+      this.shakeDeletingComment(this.resetFilmState, update.commentId),
     );
+  };
+
+  setSaving = () => {
+    this.#filmDetailsComponent.updateElement({
+      isSaving: true,
+    });
+  };
+
+  setDeleting = () => {
+    this.#filmDetailsComponent.updateElement({
+      isDeleting: true,
+    });
+  };
+
+  shakeComment = (callback) => () => {
+    this.#filmDetailsComponent.shake
+      .call({
+        element: this.#filmDetailsComponent.element.querySelector('.film-details__new-comment')
+      }, callback);
+  };
+
+  shakeDeletingComment = (callback, commentId) => () => {
+    this.#filmDetailsComponent.shake
+      .call({
+        element: this.#filmDetailsComponent.element.querySelector(`button[data-buttonid='${commentId}']`).closest('.film-details__comment')
+      }, callback);
+  };
+
+  shakeControls = (callback) => () => {
+    this.#filmDetailsComponent.shake
+      .call({
+        element: this.#filmDetailsComponent.element.querySelector('.film-details__controls')
+      }, callback);
+  };
+
+  resetFilmState = () => {
+    this.#filmDetailsComponent.updateElement({
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    });
   };
 
   #handleModelEvent = (updateType, data) => {

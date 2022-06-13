@@ -12,9 +12,8 @@ const EMOJI_ARRAY = {
 };
 
 const createFilmDetailsTemplate = (data) => {
-  const filmInfo = data.filmInfo;
-  const filmComments = data.commentList;
-  const userDetails = data.userDetails;
+  const {filmInfo, commentList, userDetails, isDeleting, commentToDelete, isSaving} = data;
+
   const smileType = data.newComment.emotion;
   const commentText = data.newComment.comment;
 
@@ -36,7 +35,13 @@ const createFilmDetailsTemplate = (data) => {
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
             <span class="film-details__comment-day">${humanizeDate(comment.date, 'D MMMM YYYY HH:MM')}</span>
-            <button class="film-details__comment-delete" data-buttonId="${comment.id}">Delete</button>
+            <button
+              class="film-details__comment-delete"
+              data-buttonId="${comment.id}"
+              ${isDeleting && commentToDelete === comment.id ? 'disabled' : ''}
+              >
+              ${isDeleting && commentToDelete === comment.id ? 'Deleting...' : 'Delete'}
+              </button>
           </p>
         </div>
       </li>`;
@@ -119,10 +124,10 @@ const createFilmDetailsTemplate = (data) => {
 
       <div class="film-details__bottom-container">
         <section class="film-details__comments-wrap">
-          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${filmComments.length}</span></h3>
+          <h3 class="film-details__comments-title">Comments <span class="film-details__comments-count">${commentList.length}</span></h3>
 
           <ul class="film-details__comments-list">
-            ${showComments(filmComments)}
+            ${showComments(commentList)}
           </ul>
 
           <div class="film-details__new-comment">
@@ -131,7 +136,11 @@ const createFilmDetailsTemplate = (data) => {
             </div>
 
             <label class="film-details__comment-label">
-              <textarea class="film-details__comment-input" placeholder="Select reaction below and write comment here" name="comment">${commentText ? commentText : ''}</textarea>
+              <textarea
+                class="film-details__comment-input"
+                placeholder="Select reaction below and write comment here"
+                name="comment"
+                ${isSaving ? 'disabled' : ''}>${commentText ? commentText : ''}</textarea>
             </label>
 
             <div class="film-details__emoji-list">
@@ -188,7 +197,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
       newComment: {
         comment: this._state.newComment.text,
         emotion: this._state.newComment.emotion,
-      }
+      },
+      isSaving: this._state.isSaving ? !this._state.isSaving : this._state.isSaving,
+      isDeleting: this._state.isDeleting ? !this._state.isDeleting : this._state.isDeleting,
+      commentToDelete: this._state.commentToDelete,
     });
   };
 
@@ -214,7 +226,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
     const updatedFilm = {...this._state};
     this._callback.watchListClick(updatedFilm);
-    this.updateFilm(updatedFilm);
   };
 
   setWatchedClickHandler = (callback) => {
@@ -227,8 +238,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this._state.userDetails.alreadyWatched = !this._state.userDetails.alreadyWatched;
 
     const updatedFilm = {...this._state};
-    this._callback.watchListClick(updatedFilm);
-    this.updateFilm(updatedFilm);
+    this._callback.watchedClick(updatedFilm);
   };
 
   setWatchListClickHandler = (callback) => {
@@ -242,7 +252,6 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
     const updatedFilm = {...this._state};
     this._callback.watchListClick(updatedFilm);
-    this.updateFilm(updatedFilm);
   };
 
   #getEmojiType = (type) => type.replace('emoji-', '');
@@ -255,7 +264,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
     this.updateElement({
       scrollPosition: this.element.scrollTop,
       newComment: {
-        comment: this._state.newComment.text,
+        comment: this._state.newComment.comment,
         emotion: emojiType ? emojiType : null,
       }
     });
@@ -303,6 +312,8 @@ export default class FilmDetailsView extends AbstractStatefulView {
   #onCommentDelete = (evt) => {
     evt.preventDefault();
     const commentId = evt.target.dataset.buttonid;
+    this._state.commentToDelete = commentId;
+
     this._callback.deleteComment({film: this._state, commentId});
   };
 
@@ -339,7 +350,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
     newComment: {
       comment: null,
       emotion: null,
-    }
+    },
+    isSaving: false,
+    isDeleting: false,
+    commentToDelete: null,
   });
 
   reset = (film) => {

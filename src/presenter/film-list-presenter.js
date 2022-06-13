@@ -1,4 +1,6 @@
 import {render, remove} from '../framework/render';
+import UiBlocker from '../framework/ui-blocker/ui-blocker';
+
 import FilmsListContainerView from '../view/films-list-container-view';
 import FilmsListSectionView from '../view/films-list-section-view';
 import FilmsListHeaderView from '../view/films-list-header-view';
@@ -13,6 +15,11 @@ import FilmPresenter from './film-presenter';
 import {sortFilmByDate, sortFilmsByRating} from '../util';
 import {FILMS_COUNT_PER_STEP, SortType, UpdateType, UserAction, FilterType} from '../const';
 import {filter} from '../filter';
+
+const TimeLimit = {
+  LOWER_LIMIT: 350,
+  UPPER_LIMIT: 1000,
+};
 
 export default class FilmListPresenter {
   #mainContainer = null;
@@ -35,6 +42,8 @@ export default class FilmListPresenter {
   #currentSortType = SortType.DEFAULT;
   #renderedFilmCount = FILMS_COUNT_PER_STEP;
   #isLoading = true;
+
+  #uiBlocker = new UiBlocker(TimeLimit.LOWER_LIMIT, TimeLimit.UPPER_LIMIT);
 
   constructor(mainContainer, filmsModel, filterModel, commentsModel) {
     this.#mainContainer = mainContainer;
@@ -88,16 +97,35 @@ export default class FilmListPresenter {
     this.#filmDetailsPresenter = filmDetailsPresenter;
   };
 
-  #handleViewAction = (actionType, updateType, update) => {
+  #handleViewAction = async (
+    actionType,
+    updateType,
+    update,
+    setFeedback = () => {},
+    setAborting = () => {}) => {
+    setFeedback();
+
     switch (actionType) {
       case UserAction.UPDATE_FILM_PARAMS:
-        this.#filmsModel.updateFilm(updateType, update);
+        try {
+          await this.#filmsModel.updateFilm(updateType, update);
+        } catch(err) {
+          setAborting();
+        }
         break;
       case UserAction.ADD_COMMENT:
-        this.#commentsModel.addComment(updateType, update);
+        try {
+          await this.#commentsModel.addComment(updateType, update);
+        } catch(err) {
+          setAborting();
+        }
         break;
       case UserAction.DELETE_COMMENT:
-        this.#commentsModel.deleteComment(updateType, update);
+        try {
+          await this.#commentsModel.deleteComment(updateType, update);
+        } catch(err) {
+          setAborting();
+        }
         break;
     }
   };
@@ -106,6 +134,7 @@ export default class FilmListPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#filmPresenter.get(data.id).init(data);
+        this.#filmDetailsPresenter.init(data);
         break;
       case UpdateType.MINOR:
         this.#clearFilmList();

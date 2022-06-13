@@ -46,7 +46,7 @@ export default class CommentsModel extends Observable {
     }
   }
 
-  async deleteComment(updateType, data) {
+  async deleteComment(updateType, data, setAborting = () => {}) {
     const {film, commentId} = data;
 
     try {
@@ -55,7 +55,9 @@ export default class CommentsModel extends Observable {
       film.commentList = film.commentList.filter((comment) => comment.id !== commentId);
       const updatedFilm = {...film};
       this._notify(updateType, updatedFilm);
+
     } catch (err) {
+      setAborting();
       throw new Error('Can\'t delete the comment');
     }
   }
