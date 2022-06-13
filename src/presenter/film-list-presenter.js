@@ -103,8 +103,7 @@ export default class FilmListPresenter {
     update,
     setFeedback = () => {},
     setAborting = () => {}) => {
-    setFeedback();
-
+    this.#uiBlocker.block();
     switch (actionType) {
       case UserAction.UPDATE_FILM_PARAMS:
         try {
@@ -115,6 +114,7 @@ export default class FilmListPresenter {
         break;
       case UserAction.ADD_COMMENT:
         try {
+          setFeedback();
           await this.#commentsModel.addComment(updateType, update);
         } catch(err) {
           setAborting();
@@ -122,12 +122,15 @@ export default class FilmListPresenter {
         break;
       case UserAction.DELETE_COMMENT:
         try {
+          setFeedback();
           await this.#commentsModel.deleteComment(updateType, update);
         } catch(err) {
           setAborting();
         }
         break;
     }
+
+    this.#uiBlocker.unblock();
   };
 
   #handleModelEvent = (updateType, data) => {
