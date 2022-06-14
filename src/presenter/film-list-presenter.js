@@ -8,7 +8,9 @@ import NoFilmsView from '../view/no-films-view';
 import SortView from '../view/sort-view';
 import FilmsListView from '../view/films-list-view';
 import ShowMoreButtonView from '../view/show-more-button-view';
+
 import LoadingView from '../view/loading-view';
+import FooterView from '../view/footer-view';
 
 import FilmPresenter from './film-presenter';
 import UserProfilePresenter from './user-profile-presenter';
@@ -23,6 +25,7 @@ const TimeLimit = {
 };
 
 const siteHeaderElement = document.querySelector('.header');
+const bodyElement = document.querySelector('body');
 
 export default class FilmListPresenter {
   #mainContainer = null;
@@ -49,6 +52,7 @@ export default class FilmListPresenter {
   #filmsListSectionMostCommentedComponent = new FilmsListSectionView('films-list--extra');
   #filmsListHeaderMostCommentedComponent = new FilmsListHeaderView('Most commented');
   #filmsListMostCommentedComponent = new FilmsListView();
+  #footerView = new FooterView();
 
   #filterType = FilterType.ALL;
   #currentSortType = SortType.DEFAULT;
@@ -65,6 +69,8 @@ export default class FilmListPresenter {
 
     this.#filmsModel.addObserver(this.#handleModelEvent);
     this.#filterModel.addObserver(this.#handleModelEvent);
+
+    render(this.#footerView, bodyElement);
   }
 
   get films() {
@@ -274,6 +280,8 @@ export default class FilmListPresenter {
     if (filmsCount > FILMS_COUNT_PER_STEP) {
       this.#renderShowMoreButton();
     }
+
+    this.#footerView.update(this.#filmsModel.films.length);
 
     // this.#renderTopRated(films);
     // this.#renderMostCommented(films);
