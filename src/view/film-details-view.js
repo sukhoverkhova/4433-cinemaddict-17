@@ -50,6 +50,16 @@ const createFilmDetailsTemplate = (data) => {
     return commentsList;
   };
 
+  const showGenres = (genres) => {
+    let genresList = '';
+
+    for(const genre of genres) {
+      genresList += `<span class="film-details__genre">${genre}</span>`;
+    }
+
+    return genresList;
+  };
+
   return (
     `<section class="film-details">
     <form class="film-details__inner" action="" method="get">
@@ -102,11 +112,9 @@ const createFilmDetailsTemplate = (data) => {
                 <td class="film-details__cell">${filmInfo.release.releaseCountry}</td>
               </tr>
               <tr class="film-details__row">
-                <td class="film-details__term">Genres</td>
+                <td class="film-details__term">${filmInfo.genre.length > 1 ? 'Genres' : 'Genre'}</td>
                 <td class="film-details__cell">
-                  <span class="film-details__genre">Drama</span>
-                  <span class="film-details__genre">Film-Noir</span>
-                  <span class="film-details__genre">Mystery</span>
+                  ${showGenres(filmInfo.genre)}
                 </td>
               </tr>
             </table>
