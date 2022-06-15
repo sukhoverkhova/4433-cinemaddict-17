@@ -32,5 +32,12 @@ export const SortType = {
   RATING: 'rating',
 };
 
+export const Method = {
+  GET: 'GET',
+  PUT: 'PUT',
+  POST: 'POST',
+  DELETE: 'DELETE',
+};
+
 export const AUTHORIZATION = 'Basic sdfsdfsdflsdkf';
 export const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';

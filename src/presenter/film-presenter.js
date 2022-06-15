@@ -11,13 +11,16 @@ export default class FilmPresenter {
   #filmDetailsPresenter = null;
   #getCurrentFilmDetails = null;
 
+  #commentsModel = null;
+
   #film = null;
 
-  constructor(filmListContainer, mainContainer, changeData, getCurrentFilmDetails) {
+  constructor(filmListContainer, mainContainer, changeData, getCurrentFilmDetails, commentsModel) {
     this.#filmListContainer = filmListContainer;
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
     this.#getCurrentFilmDetails = getCurrentFilmDetails;
+    this.#commentsModel = commentsModel;
   }
 
   init = (film) => {
@@ -48,12 +51,12 @@ export default class FilmPresenter {
     remove(this.#filmComponent);
   };
 
-  #handleModeFilmDetails = () => {
-    this.#filmDetailsPresenter.resetView();
-  };
-
   #showFilmDetails = () => {
-    this.#filmDetailsPresenter = new FilmDetailsPresenter(this.#mainContainer, this.#changeData, this.#handleModeFilmDetails);
+    this.#filmDetailsPresenter = new FilmDetailsPresenter(
+      this.#mainContainer,
+      this.#changeData,
+      this.#commentsModel
+    );
     this.#filmDetailsPresenter.init(this.#film);
     this.#getCurrentFilmDetails(this.#filmDetailsPresenter);
   };

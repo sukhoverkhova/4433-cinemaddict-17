@@ -1,10 +1,8 @@
 import {render} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
-import CommentsModel from '../model/comments-model.js';
-import CommentsApiService from '../comments-api-service';
 
 import {isEscapeKey} from '../util';
-import {OVERFLOW_HIDDEN_CLASS, UpdateType, UserAction, AUTHORIZATION, END_POINT} from '../const';
+import {OVERFLOW_HIDDEN_CLASS, UpdateType, UserAction} from '../const';
 
 export default class FilmDetailsPresenter {
   #mainContainer = null;
@@ -13,10 +11,12 @@ export default class FilmDetailsPresenter {
   #filmDetailsComponent = null;
   #film = null;
   #comments = null;
+  #commentsModel = null;
 
-  constructor(mainContainer, changeData) {
+  constructor(mainContainer, changeData, commentsModel) {
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
+    this.#commentsModel = commentsModel;
   }
 
   init = (film) => {
@@ -25,12 +25,10 @@ export default class FilmDetailsPresenter {
   };
 
   #loadComments = async (id) => {
-    const commentsModel = new CommentsModel(new CommentsApiService(END_POINT, AUTHORIZATION));
-
-    await commentsModel
+    await this.#commentsModel
       .init(id)
       .finally(() => {
-        this.#comments = commentsModel.comments;
+        this.#comments = this.#commentsModel.comments;
         this.#updateFilmDetails(this.#comments);
       });
   };
@@ -50,6 +48,8 @@ export default class FilmDetailsPresenter {
 
       this.#filmDetailsComponent.setAddCommentHandler(this.#onAddComment);
       this.#filmDetailsComponent.setDeleteCommentHandler(this.#onDeleteComment);
+
+      this.#commentsModel.addObserver(this.#handleModelEvent);
 
       this.#renderFilmDetails();
     }
@@ -106,7 +106,9 @@ export default class FilmDetailsPresenter {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
-      update
+      update,
+      () => {},
+      this.shakeControls(this.resetFilmState),
     );
   };
 
@@ -114,7 +116,9 @@ export default class FilmDetailsPresenter {
     this.#changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
-      update
+      update,
+      this.setSaving,
+      this.shakeComment(this.resetFilmState),
     );
   };
 
@@ -122,7 +126,54 @@ export default class FilmDetailsPresenter {
     this.#changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
-      update
+      update,
+      this.setDeleting,
+      this.shakeDeletingComment(this.resetFilmState, update.commentId),
     );
+  };
+
+  setSaving = () => {
+    this.#filmDetailsComponent.updateElement({
+      isSaving: true,
+    });
+  };
+
+  setDeleting = () => {
+    this.#filmDetailsComponent.updateElement({
+      isDeleting: true,
+    });
+  };
+
+  shakeComment = (callback) => () => {
+    this.#filmDetailsComponent.shake
+      .call({
+        element: this.#filmDetailsComponent.element.querySelector('.film-details__new-comment')
+      }, callback);
+  };
+
+  shakeDeletingComment = (callback, commentId) => () => {
+    this.#filmDetailsComponent.shake
+      .call({
+        element: this.#filmDetailsComponent.element.querySelector(`button[data-buttonid='${commentId}']`).closest('.film-details__comment')
+      }, callback);
+  };
+
+  shakeControls = (callback) => () => {
+    this.#filmDetailsComponent.shake
+      .call({
+        element: this.#filmDetailsComponent.element.querySelector('.film-details__controls')
+      }, callback);
+  };
+
+  resetFilmState = () => {
+    this.#filmDetailsComponent.updateElement({
+      isDisabled: false,
+      isSaving: false,
+      isDeleting: false,
+    });
+  };
+
+  #handleModelEvent = (updateType, data) => {
+    this.#filmDetailsComponent.updateFilm(data);
   };
 }
