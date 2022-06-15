@@ -1,16 +1,17 @@
 import AbstractView from '../framework/view/abstract-stateful-view';
+import {headerType} from '../const';
 
-const createFilmsListHeaderTemplate = (title) => `<h2 class="films-list__title">${title}</h2>`;
+const createFilmsListHeaderTemplate = (type) => `<h2 class="films-list__title ${type === 'DEFAULT' ? 'visually-hidden' : ''}">${headerType[type]}</h2>`;
 
 export default class FilmsListHeaderView extends AbstractView {
-  #title = '';
+  #type = '';
 
-  constructor(title = 'All movies. Upcoming') {
+  constructor(type) {
     super();
-    this.#title = title;
+    this.#type = type;
   }
 
   get template() {
-    return createFilmsListHeaderTemplate(this.#title);
+    return createFilmsListHeaderTemplate(this.#type);
   }
 }

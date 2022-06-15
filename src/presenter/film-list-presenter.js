@@ -39,18 +39,18 @@ export default class FilmListPresenter {
 
   #filmsListContainerComponent = new FilmsListContainerView();
   #filmsListSectionComponent = new FilmsListSectionView();
-  #filmsListHeaderComponent = new FilmsListHeaderView();
+  #filmsListHeaderComponent = new FilmsListHeaderView('DEFAULT');
   #filmsListComponent = new FilmsListView();
   #loadingComponent = new LoadingView();
   #filmPresenter = new Map();
   #userProfilePresenter = new UserProfilePresenter(siteHeaderElement);
 
   #filmsListSectionTopRatedComponent = new FilmsListSectionView('films-list--extra');
-  #filmsListHeaderTopRatedComponent = new FilmsListHeaderView('Top rated');
+  #filmsListHeaderTopRatedComponent = new FilmsListHeaderView('TOP_RATED');
   #filmsListTopRatedComponent = new FilmsListView();
 
   #filmsListSectionMostCommentedComponent = new FilmsListSectionView('films-list--extra');
-  #filmsListHeaderMostCommentedComponent = new FilmsListHeaderView('Most commented');
+  #filmsListHeaderMostCommentedComponent = new FilmsListHeaderView('MOST_COMMENTED');
   #filmsListMostCommentedComponent = new FilmsListView();
   #footerView = new FooterView();
 

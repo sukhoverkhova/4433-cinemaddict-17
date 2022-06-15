@@ -39,5 +39,11 @@ export const Method = {
   DELETE: 'DELETE',
 };
 
+export const headerType = {
+  DEFAULT: 'All movies. Upcoming',
+  TOP_RATED: 'Top rated',
+  MOST_COMMENTED: 'Most commented',
+};
+
 export const AUTHORIZATION = 'Basic sdfsdfsdflsdkf';
 export const END_POINT = 'https://17.ecmascript.pages.academy/cinemaddict';
