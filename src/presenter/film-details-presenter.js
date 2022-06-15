@@ -1,4 +1,4 @@
-import {render} from '../framework/render';
+import {render, remove} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
 
 import {isEscapeKey} from '../util';
@@ -56,8 +56,10 @@ export default class FilmDetailsPresenter {
   };
 
   #hideFilmDetails = () => {
-    this.#filmDetailsComponent.element.remove();
-    this.#filmDetailsComponent.removeElement();
+    // this.#filmDetailsComponent.element.remove();
+    // this.#filmDetailsComponent.removeElement();
+    remove(this.#filmDetailsComponent);
+
     document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
     document.removeEventListener('keydown', this.#onEscKeyDownHandler);
   };

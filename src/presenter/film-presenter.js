@@ -51,6 +51,10 @@ export default class FilmPresenter {
     remove(this.#filmComponent);
   };
 
+  updateFilm = (updated) => {
+    this.#filmComponent.update(updated);
+  };
+
   #showFilmDetails = () => {
     this.#filmDetailsPresenter = new FilmDetailsPresenter(
       this.#mainContainer,
@@ -61,27 +65,27 @@ export default class FilmPresenter {
     this.#getCurrentFilmDetails(this.#filmDetailsPresenter);
   };
 
-  #handleFavoriteClick = () => {
+  #handleWatchListClick = (update) => {
     this.#changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      {...this.#film, userDetails: {...this.#film.userDetails, watchlist: !this.#film.userDetails.favorite}},
+      UserAction.UPDATE_FILM_PARAMS,
+      UpdateType.PATCH,
+      update
     );
   };
 
-  #handletWatchedClick = () => {
+  #handletWatchedClick = (update) => {
     this.#changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      {...this.#film, userDetails: {...this.#film.userDetails, watchlist: !this.#film.userDetails.alreadyWatched}},
+      UserAction.UPDATE_FILM_PARAMS,
+      UpdateType.PATCH,
+      update
     );
   };
 
-  #handleWatchListClick = () => {
+  #handleFavoriteClick = (update) => {
     this.#changeData(
-      UserAction.UPDATE_FILM,
-      UpdateType.MINOR,
-      {...this.#film, userDetails: {...this.#film.userDetails, watchlist: !this.#film.userDetails.watchlist}},
+      UserAction.UPDATE_FILM_PARAMS,
+      UpdateType.PATCH,
+      update
     );
   };
 

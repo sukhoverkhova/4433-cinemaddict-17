@@ -220,6 +220,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   #closeClick = (evt) => {
     evt.preventDefault();
+    document.removeEventListener('keydown', this.#addCommentClick);
     this._callback.closeClick();
   };
 
