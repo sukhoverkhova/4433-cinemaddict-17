@@ -302,8 +302,8 @@ export default class FilmListPresenter {
 
     this.#footerView.update(this.#filmsModel.films.length);
 
-    this.#renderTopRated(films);
-    this.#renderMostCommented(films);
+    this.#renderTopRated(this.#filmsModel.films);
+    this.#renderMostCommented(this.#filmsModel.films);
   };
 
   #renderTopRated = (films) => {
