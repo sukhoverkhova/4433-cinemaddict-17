@@ -33,7 +33,7 @@ export default class FilmListPresenter {
   #filterModel = null;
   #commentsModel = null;
   #noFilmsComponent = null;
-  #showMoreButtonCompoment = null;
+  #showMoreButtonComponent = null;
   #sortComponent = null;
   #filmDetailsPresenter = null;
 
@@ -42,7 +42,7 @@ export default class FilmListPresenter {
   #filmsListHeaderComponent = new FilmsListHeaderView('DEFAULT');
   #filmsListComponent = new FilmsListView();
   #loadingComponent = new LoadingView();
-  #filmPresenter = new Map();
+  #filmPresenters = new Map();
   #userProfilePresenter = new UserProfilePresenter(siteHeaderElement);
 
   #filmsListSectionTopRatedComponent = new FilmsListSectionView('films-list--extra');
@@ -160,7 +160,7 @@ export default class FilmListPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#filmPresenter.get(data.id).init(data);
+        this.#filmPresenters.get(data.id).init(data);
         if (this.#filmDetailsPresenter !== null) {
           this.#filmDetailsPresenter.init(data);
         }
@@ -184,13 +184,13 @@ export default class FilmListPresenter {
   #clearFilmList = ({resetRenderedFilmCount = false, resetSortType = false} = {}) => {
     const filmCount = this.films.length;
 
-    this.#filmPresenter.forEach((presenter) => presenter.destroy());
-    this.#filmPresenter.clear();
+    this.#filmPresenters.forEach((presenter) => presenter.destroy());
+    this.#filmPresenters.clear();
 
     remove(this.#sortComponent);
     remove(this.#loadingComponent);
     remove(this.#noFilmsComponent);
-    remove(this.#showMoreButtonCompoment);
+    remove(this.#showMoreButtonComponent);
 
     if (resetRenderedFilmCount) {
       this.#renderedFilmCount = FILMS_COUNT_PER_STEP;
@@ -219,15 +219,15 @@ export default class FilmListPresenter {
     this.#renderedFilmCount = newRenderedfilmCount;
 
     if (this.#renderedFilmCount >= this.#filmsModel.films.length) {
-      this.#showMoreButtonCompoment.element.remove();
-      this.#showMoreButtonCompoment.removeElement();
+      this.#showMoreButtonComponent.element.remove();
+      this.#showMoreButtonComponent.removeElement();
     }
   };
 
   #renderShowMoreButton = () => {
-    this.#showMoreButtonCompoment = new ShowMoreButtonView();
-    render(this.#showMoreButtonCompoment, this.#filmsListSectionComponent.element);
-    this.#showMoreButtonCompoment.setClickHandler(this.#showMoreClickHandler);
+    this.#showMoreButtonComponent = new ShowMoreButtonView();
+    render(this.#showMoreButtonComponent, this.#filmsListSectionComponent.element);
+    this.#showMoreButtonComponent.setClickHandler(this.#showMoreClickHandler);
   };
 
   #renderLoading = () => {
@@ -252,7 +252,7 @@ export default class FilmListPresenter {
       this.#commentsModel
     );
     filmPresenter.init(film);
-    this.#filmPresenter.set(film.id, filmPresenter);
+    this.#filmPresenters.set(film.id, filmPresenter);
   };
 
   #renderPage = () => {

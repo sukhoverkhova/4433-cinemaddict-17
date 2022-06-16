@@ -15,10 +15,7 @@ const createFilmTemplate = (film) => {
     return `${croppedDescription}...`;
   };
 
-  const getActiveCLassElement = (flag) => {
-    const elementClass = flag ? ACTIVE_CLASS : '';
-    return elementClass;
-  };
+  const getActiveCLassElement = (flag) => flag ? ACTIVE_CLASS : '';
 
   return (
     `<article class="film-card">

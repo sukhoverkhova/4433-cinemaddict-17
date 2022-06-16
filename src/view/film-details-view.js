@@ -17,10 +17,7 @@ const createFilmDetailsTemplate = (data) => {
   const smileType = data.newComment.emotion;
   const commentText = data.newComment.comment;
 
-  const getActiveCLassElement = (flag) => {
-    const elementClass = flag ? ACTIVE_CLASS : '';
-    return elementClass;
-  };
+  const getActiveCLassElement = (flag) => flag ? ACTIVE_CLASS : '';
 
   const showComments = (comments) => {
     let commentsList = '';
