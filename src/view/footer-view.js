@@ -4,7 +4,7 @@ const createFooterTemplate = (count = 0) => (
   `<footer class="footer">
       <section class="footer__logo logo logo--smaller">Cinemaddict</section>
       <section class="footer__statistics">
-        ${count}
+        <p>${count}<p>
       </section>
     </footer>`
 );

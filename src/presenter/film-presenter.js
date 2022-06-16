@@ -15,8 +15,8 @@ export default class FilmPresenter {
 
   #film = null;
 
-  constructor(filmListContainer, mainContainer, changeData, getCurrentFilmDetails, commentsModel) {
-    this.#filmListContainer = filmListContainer;
+  constructor(container, mainContainer, changeData, getCurrentFilmDetails, commentsModel) {
+    this.#filmListContainer = container;
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
     this.#getCurrentFilmDetails = getCurrentFilmDetails;
@@ -36,11 +36,11 @@ export default class FilmPresenter {
     this.#filmComponent.setWatchListClickHandler(this.#watchListClickHandler);
 
     if (prevFilmComponent === null) {
-      render(this.#filmComponent, this.#filmListContainer.element);
+      render(this.#filmComponent, this.#filmListContainer);
       return;
     }
 
-    if (this.#filmListContainer.element.contains(prevFilmComponent.element)) {
+    if (this.#filmListContainer.contains(prevFilmComponent.element)) {
       replace(this.#filmComponent, prevFilmComponent);
     }
 
