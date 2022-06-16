@@ -41,13 +41,13 @@ export default class FilmDetailsPresenter {
       this.#filmDetailsComponent.reset({...this.#film, commentList: comments});
       this.#renderFilmDetails();
 
-      this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
-      this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-      this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
-      this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
+      this.#filmDetailsComponent.setCloseClickHandler(this.#closeClickHandler);
+      this.#filmDetailsComponent.setFavoriteClickHandler(this.#favoriteClickHandler);
+      this.#filmDetailsComponent.setWatchedClickHandler(this.#watchedClickHandler);
+      this.#filmDetailsComponent.setWatchListClickHandler(this.#watchListClickHandler);
 
-      this.#filmDetailsComponent.setAddCommentHandler(this.#handleAddComment);
-      this.#filmDetailsComponent.setDeleteCommentHandler(this.#handleDeleteCommentClick);
+      this.#filmDetailsComponent.setAddCommentHandler(this.#addCommentHandler);
+      this.#filmDetailsComponent.setDeleteCommentHandler(this.#deleteCommentClickHandler);
 
       this.#commentsModel.addObserver(this.#handleModelEvent);
 
@@ -82,11 +82,11 @@ export default class FilmDetailsPresenter {
     }
   };
 
-  #handleCloseClick = () => {
+  #closeClickHandler = () => {
     this.#hideFilmDetails();
   };
 
-  #handleFavoriteClick = (update) => {
+  #favoriteClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -94,7 +94,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #handletWatchedClick = (update) => {
+  #watchedClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -102,7 +102,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #handleWatchListClick = (update) => {
+  #watchListClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -112,7 +112,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #handleAddComment = (update) => {
+  #addCommentHandler = (update) => {
     this.#changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
@@ -122,7 +122,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #handleDeleteCommentClick = (update) => {
+  #deleteCommentClickHandler = (update) => {
     this.#changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,

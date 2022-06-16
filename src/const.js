@@ -1,4 +1,3 @@
-export const COMMENTS_MAX_COUNT = 8;
 export const COMMENTS_MAX_LENGTH = 140;
 
 export const FILMS_COUNT_PER_STEP = 5;

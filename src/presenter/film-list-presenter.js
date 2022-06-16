@@ -94,7 +94,7 @@ export default class FilmListPresenter {
     this.#renderPage();
   };
 
-  #handleSortTypeChange = (sortType) => {
+  #sortTypeChangeHandler = (sortType) => {
     if (this.#currentSortType === sortType) {
       return;
     }
@@ -106,7 +106,7 @@ export default class FilmListPresenter {
 
   #renderSort = () => {
     this.#sortComponent = new SortView(this.#currentSortType);
-    this.#sortComponent.setSortTypeChangeHandler(this.#handleSortTypeChange);
+    this.#sortComponent.setSortTypeChangeHandler(this.#sortTypeChangeHandler);
 
     render(this.#sortComponent, this.#mainContainer);
   };
@@ -204,7 +204,7 @@ export default class FilmListPresenter {
     remove(this.#filmsListSectionMostCommentedComponent);
   };
 
-  #handleShowMoreClick = () => {
+  #showMoreClickHandler = () => {
     this.#showMoreFilms();
   };
 
@@ -225,7 +225,7 @@ export default class FilmListPresenter {
   #renderShowMoreButton = () => {
     this.#showMoreButtonCompoment = new ShowMoreButtonView();
     render(this.#showMoreButtonCompoment, this.#filmsListSectionComponent.element);
-    this.#showMoreButtonCompoment.setClickHandler(this.#handleShowMoreClick);
+    this.#showMoreButtonCompoment.setClickHandler(this.#showMoreClickHandler);
   };
 
   #renderLoading = () => {

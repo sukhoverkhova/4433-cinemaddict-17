@@ -30,10 +30,10 @@ export default class FilmPresenter {
 
     this.#filmComponent = new FilmView(film);
 
-    this.#filmComponent.setOpenPopupClickHandler(this.#handleClick);
-    this.#filmComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-    this.#filmComponent.setWatchedClickHandler(this.#handletWatchedClick);
-    this.#filmComponent.setWatchListClickHandler(this.#handleWatchListClick);
+    this.#filmComponent.setOpenPopupClickHandler(this.#clickHandler);
+    this.#filmComponent.setFavoriteClickHandler(this.#favoriteClickHandler);
+    this.#filmComponent.setWatchedClickHandler(this.#watchedClickHandler);
+    this.#filmComponent.setWatchListClickHandler(this.#watchListClickHandler);
 
     if (prevFilmComponent === null) {
       render(this.#filmComponent, this.#filmListContainer.element);
@@ -65,7 +65,7 @@ export default class FilmPresenter {
     this.#getCurrentFilmDetails(this.#filmDetailsPresenter);
   };
 
-  #handleWatchListClick = (update) => {
+  #watchListClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -73,7 +73,7 @@ export default class FilmPresenter {
     );
   };
 
-  #handletWatchedClick = (update) => {
+  #watchedClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -81,7 +81,7 @@ export default class FilmPresenter {
     );
   };
 
-  #handleFavoriteClick = (update) => {
+  #favoriteClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -89,7 +89,7 @@ export default class FilmPresenter {
     );
   };
 
-  #handleClick = () => {
+  #clickHandler = () => {
     this.#showFilmDetails();
   };
 }
