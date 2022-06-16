@@ -3,7 +3,7 @@ import FilterPresenter from './presenter/filter-presenter';
 
 import FilmsModel from './model/films-model';
 import FilterModel from './model/filter-model';
-import CommentsModel from './model/comments-model.js';
+import CommentsModel from './model/comments-model';
 
 import FilmsApiService from './film-api-service';
 import CommentsApiService from './comments-api-service';

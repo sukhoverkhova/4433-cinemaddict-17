@@ -46,8 +46,8 @@ export default class FilmDetailsPresenter {
       this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
       this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
 
-      this.#filmDetailsComponent.setAddCommentHandler(this.#onAddComment);
-      this.#filmDetailsComponent.setDeleteCommentHandler(this.#onDeleteComment);
+      this.#filmDetailsComponent.setAddCommentHandler(this.#handleAddComment);
+      this.#filmDetailsComponent.setDeleteCommentHandler(this.#handleDeleteCommentClick);
 
       this.#commentsModel.addObserver(this.#handleModelEvent);
 
@@ -56,8 +56,6 @@ export default class FilmDetailsPresenter {
   };
 
   #hideFilmDetails = () => {
-    // this.#filmDetailsComponent.element.remove();
-    // this.#filmDetailsComponent.removeElement();
     remove(this.#filmDetailsComponent);
 
     document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
@@ -114,7 +112,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #onAddComment = (update) => {
+  #handleAddComment = (update) => {
     this.#changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
@@ -124,7 +122,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #onDeleteComment = (update) => {
+  #handleDeleteCommentClick = (update) => {
     this.#changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,

@@ -1,4 +1,4 @@
-import ApiService from './framework/api-service.js';
+import ApiService from './framework/api-service';
 import {Method} from './const';
 
 export default class CommentsApiService extends ApiService {

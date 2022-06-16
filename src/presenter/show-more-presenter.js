@@ -27,7 +27,7 @@ export default class ShowMorePresenter {
     this.#showMoreButtonCompoment = new ShowMoreButtonView();
 
     render(this.#showMoreButtonCompoment, this.#mainContainer);
-    this.#showMoreButtonCompoment.setClickHandler(this.#handleClick);
+    this.#showMoreButtonCompoment.setClickHandler(this.#handleButtonClick);
   };
 
   #renderFilm = (film) => {
@@ -56,7 +56,7 @@ export default class ShowMorePresenter {
     }
   };
 
-  #handleClick = () => {
+  #handleButtonClick = () => {
     this.#showMoreFilms();
   };
 }

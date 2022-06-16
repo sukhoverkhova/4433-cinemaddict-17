@@ -1,7 +1,7 @@
 import {render, remove, replace} from '../framework/render';
 import FilmView from '../view/film-view';
 import FilmDetailsPresenter from './film-details-presenter';
-import {UserAction, UpdateType} from '../const.js';
+import {UserAction, UpdateType} from '../const';
 
 export default class FilmPresenter {
   #filmListContainer = null;
