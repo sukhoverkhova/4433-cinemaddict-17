@@ -151,7 +151,10 @@ export default class FilmListPresenter {
   #handleModelEvent = (updateType, data) => {
     switch (updateType) {
       case UpdateType.PATCH:
-        this.#allFilmsPresenters.get(data.id).init(data);
+        this.#initPresentersItem(this.#allFilmsPresenters, data);
+        this.#initPresentersItem(this.#topRatedFilmsPresenters, data);
+        this.#initPresentersItem(this.#mostCommentedFilmsPresenters, data);
+
         if (this.#filmDetailsPresenter !== null) {
           this.#filmDetailsPresenter.init(data);
         }
@@ -179,6 +182,12 @@ export default class FilmListPresenter {
         this.#clearPresenters(this.#mostCommentedFilmsPresenters);
         this.#renderMostCommented(this.#filmsModel.films);
         break;
+    }
+  };
+
+  #initPresentersItem = (presenters, data) => {
+    if (presenters.get(data.id)) {
+      presenters.get(data.id).init(data);
     }
   };
 
