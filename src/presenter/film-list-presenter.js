@@ -161,7 +161,9 @@ export default class FilmListPresenter {
     switch (updateType) {
       case UpdateType.PATCH:
         this.#filmPresenter.get(data.id).init(data);
-        this.#filmDetailsPresenter.init(data);
+        if (this.#filmDetailsPresenter !== null) {
+          this.#filmDetailsPresenter.init(data);
+        }
         break;
       case UpdateType.MINOR:
         this.#clearFilmList();
