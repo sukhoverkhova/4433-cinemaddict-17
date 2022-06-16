@@ -1,4 +1,5 @@
 import dayjs from 'dayjs';
+import relative from 'dayjs/plugin/relativeTime';
 import {ESCAPE_KEY} from './const';
 
 export const minutesToHours = (minutesCount) => {
@@ -42,4 +43,9 @@ export const sortFilmByDate = (filmA, filmB) => {
 export const sortFilmsByRating = (filmA, filmB) => (filmB.filmInfo.totalRating - filmA.filmInfo.totalRating);
 
 export const sortFilmsByCommentsCount = (filmA, filmB) => (filmB.comments.length - filmA.comments.length);
+
+export const getDateFromNow = (date) => {
+  dayjs.extend(relative);
+  return dayjs().from(date);
+};
 

@@ -1,5 +1,5 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import {humanizeDate, minutesToHours} from '../util';
+import {humanizeDate, minutesToHours, getDateFromNow} from '../util';
 import he from 'he';
 
 const ACTIVE_CLASS = 'film-details__control-button--active';
@@ -31,7 +31,7 @@ const createFilmDetailsTemplate = (data) => {
           <p class="film-details__comment-text">${he.encode(String(comment.comment))}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
-            <span class="film-details__comment-day">${humanizeDate(comment.date, 'D MMMM YYYY HH:MM')}</span>
+            <span class="film-details__comment-day">${getDateFromNow(comment.date)}</span>
             <button
               class="film-details__comment-delete"
               data-buttonId="${comment.id}"
