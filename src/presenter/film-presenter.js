@@ -59,7 +59,8 @@ export default class FilmPresenter {
     this.#filmDetailsPresenter = new FilmDetailsPresenter(
       this.#mainContainer,
       this.#changeData,
-      this.#commentsModel
+      this.#commentsModel,
+      this.#filmComponent
     );
     this.#filmDetailsPresenter.init(this.#film);
     this.#getCurrentFilmDetails(this.#filmDetailsPresenter);

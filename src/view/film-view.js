@@ -44,12 +44,8 @@ const createFilmTemplate = (film) => {
 };
 
 export default class FilmView extends AbstractView {
-  #film = null;
-  #controlItem = null;
-
   constructor(film) {
     super();
-    this.#film = film;
 
     this._state = {...film};
     this.#setInnerHandlers();
@@ -61,7 +57,6 @@ export default class FilmView extends AbstractView {
     this.element.scrollTo(0, this._state.scrollPosition);
   };
 
-
   #setInnerHandlers = () => {
     this.element.addEventListener('click', this.#openPopupClickHandler);
     this.element.querySelector('.film-card__controls-item--add-to-watchlist').addEventListener('click', this.#watchListClickHandler);
@@ -70,11 +65,11 @@ export default class FilmView extends AbstractView {
   };
 
   get template() {
-    return createFilmTemplate(this.#film);
+    return createFilmTemplate(this._state);
   }
 
   updateFilm = (updatedFilm) => {
-    this.updateElement({...updatedFilm});
+    this.updateElement(updatedFilm);
   };
 
   setOpenPopupClickHandler = (callback) => {

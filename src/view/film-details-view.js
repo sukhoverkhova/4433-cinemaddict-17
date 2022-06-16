@@ -203,8 +203,8 @@ export default class FilmDetailsView extends AbstractStatefulView {
       ...film,
       scrollPosition: this.element.scrollTop,
       newComment: {
-        comment: this._state.newComment.text,
-        emotion: this._state.newComment.emotion,
+        comment: this._state.newComment.text ? this._state.newComment.text : '',
+        emotion: this._state.newComment.emotion ? this._state.newComment.emotion : '',
       },
       isSaving: this._state.isSaving ? !this._state.isSaving : this._state.isSaving,
       isDeleting: this._state.isDeleting ? !this._state.isDeleting : this._state.isDeleting,
@@ -304,6 +304,14 @@ export default class FilmDetailsView extends AbstractStatefulView {
         emotion: this._state.newComment.emotion,
       };
 
+      this.updateElement({
+        scrollPosition: this.element.scrollTop,
+        newComment: {
+          comment: '',
+          emotion: null,
+        }
+      });
+
       this._callback.addComment({film: this._state, newComment: newComment});
     }
   };
@@ -322,6 +330,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
     evt.preventDefault();
     const commentId = evt.target.dataset.buttonid;
     this._state.commentToDelete = commentId;
+    this._state.scrollPosition = this.element.scrollTop;
 
     this._callback.deleteComment({film: this._state, commentId});
   };

@@ -12,11 +12,13 @@ export default class FilmDetailsPresenter {
   #film = null;
   #comments = null;
   #commentsModel = null;
+  #filmPresenter = null;
 
-  constructor(mainContainer, changeData, commentsModel) {
+  constructor(mainContainer, changeData, commentsModel, filmPresenter) {
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
     this.#commentsModel = commentsModel;
+    this.#filmPresenter = filmPresenter;
   }
 
   init = (film) => {
@@ -175,5 +177,6 @@ export default class FilmDetailsPresenter {
 
   #handleModelEvent = (updateType, data) => {
     this.#filmDetailsComponent.updateFilm(data);
+    this.#filmPresenter.updateFilm(data);
   };
 }
