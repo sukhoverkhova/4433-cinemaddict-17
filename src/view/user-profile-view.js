@@ -19,28 +19,16 @@ export default class UserProfileView extends AbstractView {
 
     this._state = {
       filmCount: count,
-      userName: '',
+      userName: null,
     };
   }
 
-  update = (count) => {
-    switch(true) {
-      case (count === 0):
-        this._state.userName = '';
-        break;
-      case (count >= 1 && count <= 10):
-        this._state.userName = UserType.NOVICE;
-        break;
-      case (count >= 11 && count <= 20):
-        this._state.userName = UserType.FAN;
-        break;
-      case (count >= 21):
-        this._state.userName = UserType.MOVIE_BUFF;
-        break;
-      default:
-        break;
-    }
+  get template() {
+    return createUserProfileTemplate(this._state.userName);
+  }
 
+  update = (count) => {
+    this._state.userName = this.#getUserName(count);
     this._state.filmCount = count;
 
     this.updateElement({
@@ -51,7 +39,19 @@ export default class UserProfileView extends AbstractView {
 
   _restoreHandlers = () => { };
 
-  get template() {
-    return createUserProfileTemplate(this._state.userName);
-  }
+  #getUserName = (count) => {
+    if (count >= 1 && count <= 10) {
+      return UserType.NOVICE;
+    }
+
+    if (count >= 11 && count <= 20) {
+      return UserType.FAN;
+    }
+
+    if (count >= 21) {
+      return UserType.MOVIE_BUFF;
+    }
+
+    return null;
+  };
 }

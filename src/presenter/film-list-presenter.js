@@ -256,12 +256,9 @@ export default class FilmListPresenter {
     films.forEach((film) => this.#renderFilm(film));
   };
 
-  #renderFilm = (
-    film,
-    container = this.#filmsListComponent.getAllMoviesElement(),
-    filmType = 'DEFAULT') => {
+  #renderFilm = (film) => {
     const filmPresenter = new FilmPresenter(
-      container,
+      this.#filmsListComponent.getAllMoviesElement(),
       this.#mainContainer,
       this.#handleViewAction,
       this.#getCurrentFilmDetailsPresenter,
@@ -269,20 +266,33 @@ export default class FilmListPresenter {
     );
 
     filmPresenter.init(film);
+    this.#allFilmsPresenters.set(film.id, filmPresenter);
+  };
 
-    if (filmType === 'DEFAULT') {
-      this.#allFilmsPresenters.set(film.id, filmPresenter);
-      return;
-    }
+  #renderTopRatedFilm = (film) => {
+    const filmPresenter = new FilmPresenter(
+      this.#filmsListComponent.getTopRatedMoviesElement(),
+      this.#mainContainer,
+      this.#handleViewAction,
+      this.#getCurrentFilmDetailsPresenter,
+      this.#commentsModel
+    );
 
-    if (filmType === 'TOP_RATED') {
-      this.#topRatedFilmsPresenters.set(film.id, filmPresenter);
-      return;
-    }
+    filmPresenter.init(film);
+    this.#topRatedFilmsPresenters.set(film.id, filmPresenter);
+  };
 
-    if (filmType === 'MOST_COMMENTED') {
-      this.#mostCommentedFilmsPresenters.set(film.id, filmPresenter);
-    }
+  #renderMostCommentedFilm = (film) => {
+    const filmPresenter = new FilmPresenter(
+      this.#filmsListComponent.getMostCommentedElement(),
+      this.#mainContainer,
+      this.#handleViewAction,
+      this.#getCurrentFilmDetailsPresenter,
+      this.#commentsModel
+    );
+
+    filmPresenter.init(film);
+    this.#mostCommentedFilmsPresenters.set(film.id, filmPresenter);
   };
 
   #renderPage = () => {
@@ -317,11 +327,11 @@ export default class FilmListPresenter {
 
   #renderTopRated = (films) => {
     const sortedFilms = films.sort(sortFilmsByRating).slice(0, 2);
-    sortedFilms.forEach((film) => this.#renderFilm(film, this.#filmsListComponent.getTopRatedMoviesElement(), 'TOP_RATED'));
+    sortedFilms.forEach((film) => this.#renderTopRatedFilm(film));
   };
 
   #renderMostCommented = (films) => {
     const sortedFilms = films.sort(sortFilmsByCommentsCount).slice(0, 2);
-    sortedFilms.forEach((film) => this.#renderFilm(film, this.#filmsListComponent.getMostCommentedElement(), 'MOST_COMMENTED'));
+    sortedFilms.forEach((film) => this.#renderMostCommentedFilm(film));
   };
 }
