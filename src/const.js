@@ -1,4 +1,3 @@
-export const COMMENTS_MAX_COUNT = 8;
 export const COMMENTS_MAX_LENGTH = 140;
 
 export const FILMS_COUNT_PER_STEP = 5;
@@ -37,6 +36,12 @@ export const Method = {
   PUT: 'PUT',
   POST: 'POST',
   DELETE: 'DELETE',
+};
+
+export const headerType = {
+  DEFAULT: 'All movies. Upcoming',
+  TOP_RATED: 'Top rated',
+  MOST_COMMENTED: 'Most commented',
 };
 
 export const AUTHORIZATION = 'Basic sdfsdfsdflsdkf';

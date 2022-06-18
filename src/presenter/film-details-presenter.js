@@ -1,4 +1,4 @@
-import {render} from '../framework/render';
+import {render, remove} from '../framework/render';
 import FilmDetailsView from '../view/film-details-view';
 
 import {isEscapeKey} from '../util';
@@ -12,11 +12,13 @@ export default class FilmDetailsPresenter {
   #film = null;
   #comments = null;
   #commentsModel = null;
+  #filmPresenter = null;
 
-  constructor(mainContainer, changeData, commentsModel) {
+  constructor(mainContainer, changeData, commentsModel, filmPresenter) {
     this.#mainContainer = mainContainer;
     this.#changeData = changeData;
     this.#commentsModel = commentsModel;
+    this.#filmPresenter = filmPresenter;
   }
 
   init = (film) => {
@@ -41,13 +43,13 @@ export default class FilmDetailsPresenter {
       this.#filmDetailsComponent.reset({...this.#film, commentList: comments});
       this.#renderFilmDetails();
 
-      this.#filmDetailsComponent.setCloseClickHandler(this.#handleCloseClick);
-      this.#filmDetailsComponent.setFavoriteClickHandler(this.#handleFavoriteClick);
-      this.#filmDetailsComponent.setWatchedClickHandler(this.#handletWatchedClick);
-      this.#filmDetailsComponent.setWatchListClickHandler(this.#handleWatchListClick);
+      this.#filmDetailsComponent.setCloseClickHandler(this.#closeClickHandler);
+      this.#filmDetailsComponent.setFavoriteClickHandler(this.#favoriteClickHandler);
+      this.#filmDetailsComponent.setWatchedClickHandler(this.#watchedClickHandler);
+      this.#filmDetailsComponent.setWatchListClickHandler(this.#watchListClickHandler);
 
-      this.#filmDetailsComponent.setAddCommentHandler(this.#onAddComment);
-      this.#filmDetailsComponent.setDeleteCommentHandler(this.#onDeleteComment);
+      this.#filmDetailsComponent.setAddCommentHandler(this.#addCommentHandler);
+      this.#filmDetailsComponent.setDeleteCommentHandler(this.#deleteCommentClickHandler);
 
       this.#commentsModel.addObserver(this.#handleModelEvent);
 
@@ -56,8 +58,8 @@ export default class FilmDetailsPresenter {
   };
 
   #hideFilmDetails = () => {
-    this.#filmDetailsComponent.element.remove();
-    this.#filmDetailsComponent.removeElement();
+    remove(this.#filmDetailsComponent);
+
     document.body.classList.remove(OVERFLOW_HIDDEN_CLASS);
     document.removeEventListener('keydown', this.#onEscKeyDownHandler);
   };
@@ -82,11 +84,11 @@ export default class FilmDetailsPresenter {
     }
   };
 
-  #handleCloseClick = () => {
+  #closeClickHandler = () => {
     this.#hideFilmDetails();
   };
 
-  #handleFavoriteClick = (update) => {
+  #favoriteClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -94,7 +96,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #handletWatchedClick = (update) => {
+  #watchedClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -102,7 +104,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #handleWatchListClick = (update) => {
+  #watchListClickHandler = (update) => {
     this.#changeData(
       UserAction.UPDATE_FILM_PARAMS,
       UpdateType.PATCH,
@@ -112,7 +114,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #onAddComment = (update) => {
+  #addCommentHandler = (update) => {
     this.#changeData(
       UserAction.ADD_COMMENT,
       UpdateType.PATCH,
@@ -122,7 +124,7 @@ export default class FilmDetailsPresenter {
     );
   };
 
-  #onDeleteComment = (update) => {
+  #deleteCommentClickHandler = (update) => {
     this.#changeData(
       UserAction.DELETE_COMMENT,
       UpdateType.PATCH,
@@ -175,5 +177,6 @@ export default class FilmDetailsPresenter {
 
   #handleModelEvent = (updateType, data) => {
     this.#filmDetailsComponent.updateFilm(data);
+    this.#filmPresenter.updateFilm(data);
   };
 }

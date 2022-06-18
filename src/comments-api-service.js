@@ -1,11 +1,11 @@
-import ApiService from './framework/api-service.js';
+import ApiService from './framework/api-service';
 import {Method} from './const';
 
 export default class CommentsApiService extends ApiService {
-  async comments(filmId) {
-    return this._load({url: `comments/${filmId}`})
-      .then(ApiService.parseResponse);
-  }
+  comments = async (filmId) => (
+    this._load({url: `comments/${filmId}`})
+      .then(ApiService.parseResponse)
+  );
 
   addComment = async (comment, filmId) => {
     const response = await this._load({
@@ -15,15 +15,13 @@ export default class CommentsApiService extends ApiService {
       headers: new Headers({'Content-Type': 'application/json'}),
     });
 
-    const parsedResponse = await ApiService.parseResponse(response);
-
-    return parsedResponse;
+    return await ApiService.parseResponse(response);
   };
 
-  async deleteComment(commentId) {
-    return await this._load({
+  deleteComment = async (commentId) => (
+    await this._load({
       url: `comments/${commentId}`,
       method: Method.DELETE,
-    });
-  }
+    })
+  );
 }

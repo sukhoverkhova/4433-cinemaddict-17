@@ -6,7 +6,7 @@ import {FILMS_COUNT_PER_STEP} from '../const';
 export default class ShowMorePresenter {
   #filmListContainer = null;
   #mainContainer = null;
-  #showMoreButtonCompoment = null;
+  #showMoreButtonComponent = null;
   #changeData = null;
   #filmPresenter = null;
   #getRenderedFilmsCount = null;
@@ -24,10 +24,10 @@ export default class ShowMorePresenter {
   }
 
   init = () => {
-    this.#showMoreButtonCompoment = new ShowMoreButtonView();
+    this.#showMoreButtonComponent = new ShowMoreButtonView();
 
-    render(this.#showMoreButtonCompoment, this.#mainContainer);
-    this.#showMoreButtonCompoment.setClickHandler(this.#handleClick);
+    render(this.#showMoreButtonComponent, this.#mainContainer);
+    this.#showMoreButtonComponent.setClickHandler(this.#clickHandler);
   };
 
   #renderFilm = (film) => {
@@ -38,7 +38,7 @@ export default class ShowMorePresenter {
 
   destroy = () => {
     this.#renderedFilmCount = FILMS_COUNT_PER_STEP;
-    remove(this.#showMoreButtonCompoment);
+    remove(this.#showMoreButtonComponent);
   };
 
   #showMoreFilms = () => {
@@ -51,12 +51,12 @@ export default class ShowMorePresenter {
     this.#getRenderedFilmsCount(this.#renderedFilmCount);
 
     if (this.#renderedFilmCount >= this.#films.length) {
-      this.#showMoreButtonCompoment.element.remove();
-      this.#showMoreButtonCompoment.removeElement();
+      this.#showMoreButtonComponent.element.remove();
+      this.#showMoreButtonComponent.removeElement();
     }
   };
 
-  #handleClick = () => {
+  #clickHandler = () => {
     this.#showMoreFilms();
   };
 }

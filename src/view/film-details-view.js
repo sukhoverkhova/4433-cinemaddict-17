@@ -1,10 +1,10 @@
 import AbstractStatefulView from '../framework/view/abstract-stateful-view';
-import {humanizeDate, minutesToHours} from '../util';
+import {humanizeDate, minutesToHours, getDateFromNow} from '../util';
 import he from 'he';
 
 const ACTIVE_CLASS = 'film-details__control-button--active';
 
-const EMOJI_ARRAY = {
+const EMOJIS = {
   SMILE: 'smile',
   SLEEPING: 'sleeping',
   PUKE: 'puke',
@@ -17,10 +17,7 @@ const createFilmDetailsTemplate = (data) => {
   const smileType = data.newComment.emotion;
   const commentText = data.newComment.comment;
 
-  const getActiveCLassElement = (flag) => {
-    const elementClass = flag ? ACTIVE_CLASS : '';
-    return elementClass;
-  };
+  const getActiveCLassElement = (flag) => flag ? ACTIVE_CLASS : '';
 
   const showComments = (comments) => {
     let commentsList = '';
@@ -34,7 +31,7 @@ const createFilmDetailsTemplate = (data) => {
           <p class="film-details__comment-text">${he.encode(String(comment.comment))}</p>
           <p class="film-details__comment-info">
             <span class="film-details__comment-author">${comment.author}</span>
-            <span class="film-details__comment-day">${humanizeDate(comment.date, 'D MMMM YYYY HH:MM')}</span>
+            <span class="film-details__comment-day">${getDateFromNow(comment.date)}</span>
             <button
               class="film-details__comment-delete"
               data-buttonId="${comment.id}"
@@ -48,6 +45,16 @@ const createFilmDetailsTemplate = (data) => {
     }
 
     return commentsList;
+  };
+
+  const showGenres = (genres) => {
+    let genresList = '';
+
+    for(const genre of genres) {
+      genresList += `<span class="film-details__genre">${genre}</span>`;
+    }
+
+    return genresList;
   };
 
   return (
@@ -102,11 +109,9 @@ const createFilmDetailsTemplate = (data) => {
                 <td class="film-details__cell">${filmInfo.release.releaseCountry}</td>
               </tr>
               <tr class="film-details__row">
-                <td class="film-details__term">Genres</td>
+                <td class="film-details__term">${filmInfo.genre.length > 1 ? 'Genres' : 'Genre'}</td>
                 <td class="film-details__cell">
-                  <span class="film-details__genre">Drama</span>
-                  <span class="film-details__genre">Film-Noir</span>
-                  <span class="film-details__genre">Mystery</span>
+                  ${showGenres(filmInfo.genre)}
                 </td>
               </tr>
             </table>
@@ -144,22 +149,22 @@ const createFilmDetailsTemplate = (data) => {
             </label>
 
             <div class="film-details__emoji-list">
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${smileType === EMOJI_ARRAY.SMILE ? 'checked' : ''}>
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-smile" value="smile" ${smileType === EMOJIS.SMILE ? 'checked' : ''}>
               <label class="film-details__emoji-label" for="emoji-smile">
                 <img src="./images/emoji/smile.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${smileType === EMOJI_ARRAY.SLEEPING ? 'checked' : ''}>
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-sleeping" value="sleeping" ${smileType === EMOJIS.SLEEPING ? 'checked' : ''}>
               <label class="film-details__emoji-label" for="emoji-sleeping">
                 <img src="./images/emoji/sleeping.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${smileType === EMOJI_ARRAY.PUKE ? 'checked' : ''}>
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-puke" value="puke" ${smileType === EMOJIS.PUKE ? 'checked' : ''}>
               <label class="film-details__emoji-label" for="emoji-puke">
                 <img src="./images/emoji/puke.png" width="30" height="30" alt="emoji">
               </label>
 
-              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${smileType === EMOJI_ARRAY.ANGRY ? 'checked' : false}>
+              <input class="film-details__emoji-item visually-hidden" name="comment-emoji" type="radio" id="emoji-angry" value="angry" ${smileType === EMOJIS.ANGRY ? 'checked' : false}>
               <label class="film-details__emoji-label" for="emoji-angry">
                 <img src="./images/emoji/angry.png" width="30" height="30" alt="emoji">
               </label>
@@ -195,8 +200,8 @@ export default class FilmDetailsView extends AbstractStatefulView {
       ...film,
       scrollPosition: this.element.scrollTop,
       newComment: {
-        comment: this._state.newComment.text,
-        emotion: this._state.newComment.emotion,
+        comment: this._state.newComment.text ? this._state.newComment.text : '',
+        emotion: this._state.newComment.emotion ? this._state.newComment.emotion : '',
       },
       isSaving: this._state.isSaving ? !this._state.isSaving : this._state.isSaving,
       isDeleting: this._state.isDeleting ? !this._state.isDeleting : this._state.isDeleting,
@@ -207,11 +212,12 @@ export default class FilmDetailsView extends AbstractStatefulView {
   setCloseClickHandler = (callback) => {
     this._callback.closeClick = callback;
     this.element.querySelector('.film-details__close-btn')
-      .addEventListener('click', this.#closeClick);
+      .addEventListener('click', this.#closeClickHandler);
   };
 
-  #closeClick = (evt) => {
+  #closeClickHandler = (evt) => {
     evt.preventDefault();
+    document.removeEventListener('keydown', this.#addCommentHandler);
     this._callback.closeClick();
   };
 
@@ -230,10 +236,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   setWatchedClickHandler = (callback) => {
     this._callback.watchedClick = callback;
-    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedClickHandler);
+    this.element.querySelector('.film-details__control-button--watched').addEventListener('click', this.#watchedButtonClickHandler);
   };
 
-  #watchedClickHandler = (evt) => {
+  #watchedButtonClickHandler = (evt) => {
     evt.preventDefault();
     this._state.userDetails.alreadyWatched = !this._state.userDetails.alreadyWatched;
 
@@ -243,10 +249,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   setWatchListClickHandler = (callback) => {
     this._callback.watchListClick = callback;
-    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchListClick);
+    this.element.querySelector('.film-details__control-button--watchlist').addEventListener('click', this.#watchListClickHandler);
   };
 
-  #watchListClick = (evt) => {
+  #watchListClickHandler = (evt) => {
     evt.preventDefault();
     this._state.userDetails.watchlist = !this._state.userDetails.watchlist;
 
@@ -283,10 +289,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
 
   setAddCommentHandler = (callback) => {
     this._callback.addComment = callback;
-    document.addEventListener('keydown', this.#addCommentClick);
+    document.addEventListener('keydown', this.#addCommentHandler);
   };
 
-  #addCommentClick = (evt) => {
+  #addCommentHandler = (evt) => {
     if (evt.ctrlKey && evt.key === 'Enter') {
       evt.preventDefault();
 
@@ -294,6 +300,14 @@ export default class FilmDetailsView extends AbstractStatefulView {
         comment: this._state.newComment.comment,
         emotion: this._state.newComment.emotion,
       };
+
+      this.updateElement({
+        scrollPosition: this.element.scrollTop,
+        newComment: {
+          comment: '',
+          emotion: null,
+        }
+      });
 
       this._callback.addComment({film: this._state, newComment: newComment});
     }
@@ -305,14 +319,15 @@ export default class FilmDetailsView extends AbstractStatefulView {
     const deleteButtonElements = this.element.querySelectorAll('.film-details__comment-delete');
 
     deleteButtonElements.forEach((button) => {
-      button.addEventListener('click', this.#onCommentDelete);
+      button.addEventListener('click', this.#commentDeleteClickHandler);
     });
   };
 
-  #onCommentDelete = (evt) => {
+  #commentDeleteClickHandler = (evt) => {
     evt.preventDefault();
     const commentId = evt.target.dataset.buttonid;
     this._state.commentToDelete = commentId;
+    this._state.scrollPosition = this.element.scrollTop;
 
     this._callback.deleteComment({film: this._state, commentId});
   };
@@ -327,7 +342,7 @@ export default class FilmDetailsView extends AbstractStatefulView {
     const deleteButtonElements = this.element.querySelectorAll('.film-details__comment-delete');
 
     deleteButtonElements.forEach((button) => {
-      button.addEventListener('click', this.#onCommentDelete);
+      button.addEventListener('click', this.#commentDeleteClickHandler);
     });
 
     this.setCloseClickHandler(this._callback.closeClick);
@@ -336,10 +351,10 @@ export default class FilmDetailsView extends AbstractStatefulView {
       .addEventListener('click', this.#favoriteClickHandler);
 
     this.element.querySelector('.film-details__control-button--watched')
-      .addEventListener('click', this.#watchedClickHandler);
+      .addEventListener('click', this.#watchedButtonClickHandler);
 
     this.element.querySelector('.film-details__control-button--watchlist')
-      .addEventListener('click', this.#watchListClick);
+      .addEventListener('click', this.#watchListClickHandler);
 
     this.element.querySelector('.film-details__comment-input')
       .addEventListener('input', this.#commentInputHandler);
