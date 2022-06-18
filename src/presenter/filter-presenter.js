@@ -50,7 +50,7 @@ export default class FilmPresenter {
     const filters = this.filters;
     const prevFilterComponent = this.#filterComponent;
 
-    this.#filterComponent = new FilterView(filters, this.#filterModel.filter);
+    this.#filterComponent = new FilterView(filters, this.#filterModel.filterType);
     this.#filterComponent.setFilterTypeClickHandler(this.#handleFilterTypeClick);
 
     if (prevFilterComponent === null) {
@@ -67,7 +67,7 @@ export default class FilmPresenter {
   };
 
   #handleFilterTypeClick = (filterType) => {
-    if (this.#filterModel.filter === filterType) {
+    if (this.#filterModel.filterType === filterType) {
       return;
     }
 

@@ -360,6 +360,12 @@ export default class FilmDetailsView extends AbstractStatefulView {
       .addEventListener('input', this.#commentInputHandler);
   };
 
+  reset = (film) => {
+    this.updateElement(
+      FilmDetailsView.parseFilmToState(film),
+    );
+  };
+
   static parseFilmToState = (film) => ({...film,
     scrollPosition: 0,
     newComment: {
@@ -370,10 +376,4 @@ export default class FilmDetailsView extends AbstractStatefulView {
     isDeleting: false,
     commentToDelete: null,
   });
-
-  reset = (film) => {
-    this.updateElement(
-      FilmDetailsView.parseFilmToState(film),
-    );
-  };
 }
